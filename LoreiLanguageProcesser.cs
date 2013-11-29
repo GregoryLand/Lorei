@@ -58,27 +58,39 @@ namespace Lorei
         /************ Methods ************/
         public void LoreiStartListening()
         {
-            m_speechRecognizer.Enabled = true;
-            if (StateChanged != null) StateChanged(this, m_speechRecognizer.Enabled);
+            if (!m_Enabled)
+            {
+                m_speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+                if (StateChanged != null) StateChanged(this, true);
+                m_Enabled = true;
+            }
         }
         public void LoreiStopListening()
         {
-            m_speechRecognizer.Enabled = false;
-            if( StateChanged != null ) StateChanged(this, m_speechRecognizer.Enabled);
+            if (m_Enabled)
+            {
+                m_speechRecognizer.RecognizeAsyncCancel();
+                if (StateChanged != null) StateChanged(this, false);
+                m_Enabled = false;
+            }
         }
 
         // Event Handlers
         private void m_speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             // Interaction Message
-            m_speechSynthesizer.SpeakAsync("Speech Recognized");
+            m_speechSynthesizer.SpeakAsync("Ok!");
             
             // Parse Speech
             ParseSpeech(e);
         }
         private void m_speechRecognizer_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)
         {
-            m_speechSynthesizer.SpeakAsync("No");
+            // If we knew any words
+            if (e.Result.Words.Count > 0)
+            {
+                m_speechSynthesizer.SpeakAsync("What?");
+            }
         }
 
         /************ Helper Methods ************/
@@ -92,7 +104,6 @@ namespace Lorei
             m_luaEngine.RegisterFunction("SendMessage", this, this.GetType().GetMethod("DispatchMessageToWindow"));
             m_luaEngine.RegisterFunction("LaunchProgram", this, this.GetType().GetMethod("LaunchProgram"));
             RegisterFunctionTemplate("ExitProgram");
-            //m_luaEngine.RegisterFunction("RegisterLoreiName", this, this.GetType().GetMethod("RegisterLoreiName"));
             RegisterFunctionTemplate("RegisterLoreiName");
             RegisterFunctionTemplate("RegisterLoreiFunction");
             RegisterFunctionTemplate("RegisterProgramWithScript");
@@ -108,13 +119,16 @@ namespace Lorei
         private void SetupSpeechRecognitionEngine()
         {
             // Setup Speech Engine
-            m_speechRecognizer = new SpeechRecognizer();
+            m_speechRecognizer = new SpeechRecognitionEngine();
 
             if (m_speechRecognizer == null)
             {
                 m_speechSynthesizer.SpeakAsync("Speech Recognizer Creation Failed is Null");
             }
-            //else m_speechSynthesizer.SpeakAsync("Speech Recognizer Created");
+            else m_speechSynthesizer.SpeakAsync("Speech Recognizer Created");
+
+            // Bind to default audio device
+            m_speechRecognizer.SetInputToDefaultAudioDevice();
 
             // Call Lua Junk
             m_luaEngine.DoFile("setup.lua");
@@ -139,11 +153,11 @@ namespace Lorei
             m_ProgramControl     = new GrammarBuilder();
 
             // Setup Keywords
-            keywords = new Choices(m_Keywords.ToArray());
+            keywords  = new Choices(m_Keywords.ToArray());
             // Setup Function List
             functions = new Choices(m_Functions.ToArray());
             // Setup List of Programs;
-            programs = new Choices(m_Programs.ToArray()); 
+            programs  = new Choices(m_Programs.ToArray()); 
             // Program Functions
             programActions = new Choices(m_ProgramActions.ToArray());
 
@@ -218,123 +232,29 @@ namespace Lorei
                 default:
                     break;
             }
-
-            // Not needed left for example of what not todo.
-            // Not disabled so do the work
-            /*switch (e.Result.Grammar.Name)
-	        {
-                case "m_FunctionGrammar":
-                    switch (e.Result.Words[1].Text)
-                    {
-                        case "Launch":
-                            switch (e.Result.Words[2].Text)
-                            {
-                                case "Ventrilo":
-                                    LaunchProgram("C:\\Program Files\\Ventrilo\\Ventrilo.exe");
-                                    break;
-
-                                case "Command":
-                                    LaunchProgram("C:\\Windows\\system32\\cmd.exe");
-                                    break;
-
-                                case "Winamp":
-                                    LaunchProgram("C:\\Program Files\\Winamp\\winamp.exe");
-                                    break;
-
-                                case "Windows":
-                                    LaunchProgram("C:\\WINDOWS\\explorer.exe");
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                            break;
-                        case "Close":
-                            switch (e.Result.Words[2].Text)
-                            {
-                                case "Ventrilo":
-                                    ExitProgram("C:\\Program Files\\Ventrilo\\Ventrilo.exe");
-                                    break;
-
-                                case "Command":
-                                    ExitProgram("C:\\Windows\\system32\\cmd.exe");
-                                    break;
-
-                                case "Winamp":
-                                    ExitProgram("C:\\Program Files\\Winamp\\winamp.exe");
-                                    break;
-
-                                case "Windows":
-                                    ExitProgram("C:\\WINDOWS\\explorer.exe");
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                            break;
-
-                        case "Disable":
-                            if (e.Result.Words[2].Text == "Speech") m_disabledByVoice = true ;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    break;
-
-                case "m_ProgramGrammar":
-                    switch (e.Result.Words[1].Text)
-                    {
-                        case "Winamp":
-                            switch (e.Result.Words[2].Text)
-                            {
-                                case "Previous":
-                                    DispatchMessageToWindow("C:\\Program Files\\Winamp\\winamp.exe", WM_COMMAND, WINAMP_BUTTON1, 0);
-                                    break;
-                                case "Play":
-                                    DispatchMessageToWindow("C:\\Program Files\\Winamp\\winamp.exe", WM_COMMAND, WINAMP_BUTTON2, 0);
-                                    break;
-                                case "Pause":
-                                    DispatchMessageToWindow("C:\\Program Files\\Winamp\\winamp.exe", WM_COMMAND, WINAMP_BUTTON3, 0);
-                                    break;
-                                case "Next":
-                                    DispatchMessageToWindow("C:\\Program Files\\Winamp\\winamp.exe", WM_COMMAND, WINAMP_BUTTON5, 0);
-                                    break;
-                                case "Stop":
-                                    DispatchMessageToWindow("C:\\Program Files\\Winamp\\winamp.exe", WM_COMMAND, WINAMP_BUTTON4, 0);
-                                    break;
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                    break;
-
-		        default:
-                    break;
-	        }*/
-                
-
         }
         public void LaunchProgram(String p_program)
         {
-            // If Key exists
-            if (m_runningPrograms.ContainsKey(p_program))
+            if (!m_runningPrograms.ContainsKey(p_program) )
             {
-                // and If the key in the collection is null then we remake the process
-                if (m_runningPrograms[p_program] == null)
-                {
-                    m_runningPrograms[p_program] = Process.Start(p_program);
-                    return;
-                }
-                
-                // Else we quit because we are allready manageing one
-                m_speechSynthesizer.SpeakAsync("Unable to launch program");
-                return;
+                // If the program isnt running start it
+                // Add the program to the dictonary and continue as normal
+                m_runningPrograms.Add(p_program, Process.Start(p_program));
             }
-            // Add the program to the dictonary and continue as normal
-            m_runningPrograms.Add(p_program, Process.Start(p_program));
+            else
+            {
+                if(m_runningPrograms[p_program].HasExited)
+                {
+                    // Program has exited and can be restarted
+                    m_runningPrograms[p_program].Start();
+                }
+                else
+                {
+                    // Program is still running and shouldnt me messed with
+                    m_speechSynthesizer.SpeakAsync("Program Is Already Running");
+                }
+            }
+         
         }
         public void ExitProgram(String p_program)
         {
@@ -342,8 +262,14 @@ namespace Lorei
             Process procToKill;
             if ( m_runningPrograms.TryGetValue(p_program, out procToKill) )
             {
-                // Close the main window so the program exits
-                procToKill.CloseMainWindow();
+                // Check to make sure process is still alive.
+                procToKill.Refresh();
+
+                if (!procToKill.HasExited)
+                {
+                    // Close the main window so the program exits
+                    procToKill.CloseMainWindow();
+                }
                 // Then remove the process from the process map so we can
                 // launch the program again later.
                 m_runningPrograms.Remove(p_program);
@@ -431,18 +357,8 @@ namespace Lorei
         [DllImport("user32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
-        // Constants
-        //private const int WM_USER        = 0x0400;
-        //private const int WM_COMMAND     = 0x0111;
-        //private const int WM_QUIT        = 0x0012;
-        //private const int IPC_STARTPLAY  = 0x0102;
-        //private const int IPC_ISPLAYING  = 0x0104;
-        //private const int WINAMP_BUTTON1 = 40044;  // Winamp Previous
-        //private const int WINAMP_BUTTON2 = 40045;  // Winamp Play
-        //private const int WINAMP_BUTTON3 = 40046;  // Winamp Pause
-        //private const int WINAMP_BUTTON4 = 40047;  // Winamp Stop
-        //private const int WINAMP_BUTTON5 = 40048;  // Winamp Next
-        //private const int WINAMP_PLAYBOX = 40029;
+        /************ Constants ************/
+
         
         /************ Events ************/
         //public event ParseSpeech TextReceived;
@@ -458,7 +374,7 @@ namespace Lorei
             }
             get
             {
-                return m_speechRecognizer.Enabled;
+                return m_Enabled;//m_speechRecognizer.Enabled;
             }
         }
 
@@ -470,7 +386,8 @@ namespace Lorei
         private List<String> m_ProgramActions = new List<string>();
         
         // Speech Components
-        private SpeechRecognizer  m_speechRecognizer;
+        //private SpeechRecognizer  m_speechRecognizer;
+        private SpeechRecognitionEngine m_speechRecognizer;
         private SpeechSynthesizer m_speechSynthesizer;
         private GrammarBuilder    m_FunctionExecution;
         private GrammarBuilder    m_ProgramControl;
@@ -480,18 +397,10 @@ namespace Lorei
         // Program Control Data
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string,Process>();
         private bool m_disabledByVoice = false;
-        
+        private bool m_Enabled = false;
+
         // Lua Engine Data
         Lua m_luaEngine;
         bool m_RegistrationComplete = false;
-    }
-
-    enum WinampCommands 
-    {
-        WINAMP_PREVIOUS = 40044,
-        WINAMP_PLAY     = 40045,
-        WINAMP_PAUSE    = 40046,
-        WINAMP_STOP     = 40047,
-        WINAMP_NEXT     = 40048
     }
 }

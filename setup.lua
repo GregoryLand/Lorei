@@ -4,6 +4,8 @@
 RegisterLoreiName("System");
 RegisterLoreiName("Lorei");
 RegisterLoreiName("Viki");
+RegisterLoreiName("Endora");
+
 
 --Setup Functions--
 RegisterLoreiFunction("Launch");
@@ -14,3 +16,4 @@ RegisterProgramWithScript("Winamp");
 RegisterProgramWithScript("Command");
 RegisterProgramWithScript("Ventrilo");
 RegisterProgramWithScript("Pandora");
+RegisterProgramWithScript("Chrome");
