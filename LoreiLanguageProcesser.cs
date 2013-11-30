@@ -359,7 +359,6 @@ namespace Lorei
 
         /************ Constants ************/
 
-        
         /************ Events ************/
         //public event ParseSpeech TextReceived;
         public event ProcesserSwitchChanged StateChanged;

@@ -6,7 +6,6 @@ RegisterLoreiName("Lorei");
 RegisterLoreiName("Viki");
 RegisterLoreiName("Endora");
 
-
 --Setup Functions--
 RegisterLoreiFunction("Launch");
 RegisterLoreiFunction("Close");
