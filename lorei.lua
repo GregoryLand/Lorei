@@ -1,9 +1,9 @@
 -- Setup Command Line
-RegisterLoreiProgramName("lorei");
+RegisterLoreiProgramName("lorei")
 
 -- Setup Keywords
-RegisterLoreiProgramCommand("enable");
-RegisterLoreiProgramCommand("disable");
+RegisterLoreiProgramCommand("enable")
+RegisterLoreiProgramCommand("disable")
 
 -- Got nothin right now
 

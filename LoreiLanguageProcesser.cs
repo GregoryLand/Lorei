@@ -104,6 +104,7 @@ namespace Lorei
             m_luaEngine.RegisterFunction("SendMessage", this, this.GetType().GetMethod("DispatchMessageToWindow"));
             m_luaEngine.RegisterFunction("LaunchProgram", this, this.GetType().GetMethod("LaunchProgram"));
             RegisterFunctionTemplate("ExitProgram");
+            RegisterFunctionTemplate("ExitStubbornProgram");
             RegisterFunctionTemplate("RegisterLoreiName");
             RegisterFunctionTemplate("RegisterLoreiFunction");
             RegisterFunctionTemplate("RegisterProgramWithScript");
@@ -190,7 +191,7 @@ namespace Lorei
             m_speechSynthesizer = new SpeechSynthesizer();
         }
 
-        // Helper Methods For Parsing Speech
+        // Helper Methods For Parsing Speech and Lua accessable macros
         private void ParseSpeech(SpeechRecognizedEventArgs e)
         {
             // Check if disabled by voice
@@ -275,6 +276,24 @@ namespace Lorei
                 m_runningPrograms.Remove(p_program);
             }
             // work done go home 
+        }
+        public void ExitStubbornProgram(String p_program)
+        {
+            Process procToKill;
+            if (m_runningPrograms.TryGetValue(p_program, out procToKill))
+            {
+                // Check to make sure process is still alive.
+                procToKill.Refresh();
+
+                if (!procToKill.HasExited)
+                {
+                    // Close the main window so the program exits
+                    procToKill.Kill();
+                }
+                // Then remove the process from the process map so we can
+                // launch the program again later.
+                m_runningPrograms.Remove(p_program);
+            }
         }
         public void DispatchMessageToWindow(String p_program, int p_myMessage, int p_myWParam, int p_myLParam)
         {

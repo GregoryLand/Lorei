@@ -1,5 +1,5 @@
 -- Setup Command Line
-RegisterLoreiProgramName("command");
+RegisterLoreiProgramName("command")
 
 -- Setup Keywords
 -- Got nothin right now
@@ -9,17 +9,17 @@ if( command == nil) then
 	command = {}
 end
 
-command.FilePath = "C:\\Windows\\system32\\cmd.exe";
+command.FilePath = "C:\\Windows\\system32\\cmd.exe"
 
 
 --ToLaunch
 function command.ToLaunch()
-	LaunchProgram(command.FilePath);
-end;
+	LaunchProgram(command.FilePath)
+end
 
 function command.ToClose()
-	ExitProgram(command.FilePath);
-end;
+	ExitProgram(command.FilePath)
+end
 
 function command.OnSpeechReceved( e )
-end;
+end
