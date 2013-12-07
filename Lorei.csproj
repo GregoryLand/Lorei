@@ -101,7 +101,7 @@
     <Content Include="lorei.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="pandora.lua">
+    <Content Include="Pandora.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Chrome.lua">

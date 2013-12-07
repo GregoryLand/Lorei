@@ -110,6 +110,7 @@ namespace Lorei
             RegisterFunctionTemplate("RegisterProgramWithScript");
             RegisterFunctionTemplate("RegisterLoreiProgramName");
             RegisterFunctionTemplate("RegisterLoreiProgramCommand");
+            RegisterFunctionTemplate("SayMessage");
         }
         private void RegisterFunctionTemplate(string functionName)
         {
@@ -205,6 +206,10 @@ namespace Lorei
             }
             // ENDHACK:::::ENDHACK::::ENDHACK
 
+            // Let the world know we parsed a command
+            m_lastCommand = e.Result.Text;
+            this.TextReceived(this, e);
+
             //m_luaEngine.DoString("winamp:ToLaunch()");
             // This function calles the approprate function in the lua file so that 
             // programs can be controled from the lua script and lorei needs to know
@@ -221,14 +226,25 @@ namespace Lorei
             switch (e.Result.Grammar.Name)
             {
                 case "m_FunctionGrammar":
-                    string s = e.Result.Words[2].Text.ToLower() + ".To" + e.Result.Words[1].Text + "()";
+                    string s = e.Result.Words[2].Text + ".To" + e.Result.Words[1].Text + "()";
                     //m_luaEngine.DoString("winamp.ToLaunch()");
                     m_luaEngine.DoString(s);
                     break;
                 case "m_ProgramGrammar":
                     //m_luaEngine["event"] = e;
                     //m_luaEngine.DoString(e.Result.Words[1].Text + ".OnSpeechReceved()");
-                    m_luaEngine.GetFunction(e.Result.Words[1].Text + ".OnSpeechReceved").Call(e.Result.Words[2].Text);
+                    
+                    // Rebuild the string from words to pass to the Lua engine.
+                    string textToPass = "";
+                    for (int x = 2; x < e.Result.Words.Count; x++)
+                    {
+                        if (x > 2) textToPass += " ";
+                        textToPass += e.Result.Words[x].Text;
+                    }
+
+                    // If this throws make sure your scripts are correct.  capitalizion must match on RegisterLoreiProgramName and the Lua object itself
+                    m_luaEngine.GetFunction(e.Result.Words[1].Text + ".OnSpeechReceved").Call( textToPass );//e.Result.Words[2].Text);
+
                     break;
                 default:
                     break;
@@ -312,13 +328,13 @@ namespace Lorei
                 myProcess.Refresh();  // This command took me days to find gota love msdn docs
                     
                // Import the win32 send message function so we can drop messages into the program
-               LoreiLanguageProcesser.SendMessage(myProcess.MainWindowHandle, myMessage, myWParam, myLParam);
+               LoreiLanguageProcesser.PostMessage(myProcess.MainWindowHandle, myMessage, myWParam, myLParam);
             }
             return;
         }
 
         // Lua General Script Methods
-        private void SayMessage(string p_Message)
+        public void SayMessage(string p_Message)
         {
             // This makes the speach engine for the program say things
             // this function is made accessable to lua so scripts can say stuff
@@ -373,13 +389,15 @@ namespace Lorei
         }
 
         // Imported Stuff
+        //[DllImport("user32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Auto)]
+        //private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
         [DllImport("user32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Auto)]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        private static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
         /************ Constants ************/
 
         /************ Events ************/
-        //public event ParseSpeech TextReceived;
+        public event ParseSpeech TextReceived;
         public event ProcesserSwitchChanged StateChanged;
 
         /************ Accessers ************/
@@ -394,6 +412,14 @@ namespace Lorei
             {
                 return m_Enabled;//m_speechRecognizer.Enabled;
             }
+        }
+        public string LastCommand
+        {
+            get
+            {
+                return m_lastCommand;
+            }
+            
         }
 
         /************ Data ************/
@@ -416,6 +442,7 @@ namespace Lorei
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string,Process>();
         private bool m_disabledByVoice = false;
         private bool m_Enabled = false;
+        private string m_lastCommand;
 
         // Lua Engine Data
         Lua m_luaEngine;

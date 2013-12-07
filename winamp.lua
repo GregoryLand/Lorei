@@ -1,5 +1,5 @@
 --Setup Winamp
-RegisterLoreiProgramName("winamp")
+RegisterLoreiProgramName("Winamp")
 
 --Setup Winamps keywords
 RegisterLoreiProgramCommand("Play")
@@ -9,41 +9,41 @@ RegisterLoreiProgramCommand("Next")
 RegisterLoreiProgramCommand("Previous")
 
 ------------ Object containing the Functions required by Lorei ------------
-if( winamp == nil) then
-	winamp = {}
+if( Winamp == nil) then
+	Winamp = {}
 end
 
-winamp.FilePath = "C:\\Program Files (x86)\\Winamp\\winamp.exe"
-winamp.WM_COMMAND = 0x0111
-winamp.PLAY     = 40045
-winamp.PAUSE    = 40046
-winamp.STOP     = 40047
-winamp.PREVIOUS = 40044
-winamp.NEXT     = 40048
+Winamp.FilePath = "C:\\Program Files (x86)\\Winamp\\winamp.exe"
+Winamp.WM_COMMAND = 0x0111
+Winamp.PLAY     = 40045
+Winamp.PAUSE    = 40046
+Winamp.STOP     = 40047
+Winamp.PREVIOUS = 40044
+Winamp.NEXT     = 40048
 
 --Functions
 -- ToLaunch
-function winamp.ToLaunch()
-	LaunchProgram(winamp.FilePath)
+function Winamp.ToLaunch()
+	LaunchProgram(Winamp.FilePath)
 end
 
-function winamp.ToClose()
-	ExitProgram(winamp.FilePath)
+function Winamp.ToClose()
+	ExitProgram(Winamp.FilePath)
 end
 
 
 
 -- On Speech Receved
-function winamp.OnSpeechReceved( e )
+function Winamp.OnSpeechReceved( e )
 	if e == "Play" then
-		SendMessage( winamp.FilePath, winamp.WM_COMMAND, winamp.PLAY    , 0)
+		SendMessage( Winamp.FilePath, Winamp.WM_COMMAND, Winamp.PLAY    , 0)
 	elseif e == "Pause" then
-		SendMessage( winamp.FilePath, winamp.WM_COMMAND, winamp.PAUSE   , 0)
+		SendMessage( Winamp.FilePath, Winamp.WM_COMMAND, Winamp.PAUSE   , 0)
 	elseif e == "Stop" then
-		SendMessage( winamp.FilePath, winamp.WM_COMMAND, winamp.STOP    , 0)
+		SendMessage( Winamp.FilePath, Winamp.WM_COMMAND, Winamp.STOP    , 0)
 	elseif e == "Previous" then
-		SendMessage( winamp.FilePath, winamp.WM_COMMAND, winamp.PREVIOUS, 0)
+		SendMessage( Winamp.FilePath, Winamp.WM_COMMAND, Winamp.PREVIOUS, 0)
 	elseif e == "Next" then
-		SendMessage( winamp.FilePath, winamp.WM_COMMAND, winamp.NEXT    , 0)
+		SendMessage( Winamp.FilePath, Winamp.WM_COMMAND, Winamp.NEXT    , 0)
 	end
 end
