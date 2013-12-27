@@ -221,7 +221,7 @@ namespace Lorei
             // what i replaced.  Every program would have had to be hard coded into lorei
             // and this system works much much better.
             
-            try {
+           // try {
                 switch (e.Result.Grammar.Name)
                 {
                     case "m_FunctionGrammar":
@@ -234,22 +234,21 @@ namespace Lorei
                         string textToPass = "";
                         for (int x = 2; x < e.Result.Words.Count; x++)
                         {
+                            if (x > 2) textToPass += " ";
                             textToPass += e.Result.Words[x].Text;
-                            textToPass += " ";
                         }
 
                         // If this throws make sure your scripts are correct.  capitalizion must match on RegisterLoreiProgramName and the Lua object itself
-
                         m_luaEngine.GetFunction(e.Result.Words[1].Text + ".OnSpeechReceved").Call(textToPass);//e.Result.Words[2].Text);
                         break;
                     default:
                         break;
                 }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.StackTrace);
-            }
+        //    }
+        //    catch (Exception exception)
+        //    {
+         //       Console.WriteLine(exception.StackTrace);
+        //    }
         }
         public void LaunchProgram(String p_program)
         {
@@ -420,7 +419,7 @@ namespace Lorei
             }
             get
             {
-                return m_Enabled;//m_speechRecognizer.Enabled;
+                return m_Enabled;
             }
         }
         public string LastCommand
