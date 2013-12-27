@@ -31,7 +31,7 @@ using System.Speech.Synthesis;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using LuaInterface;
+using NLua;
 
 namespace Lorei
 {
