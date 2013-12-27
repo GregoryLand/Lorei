@@ -41,12 +41,12 @@ namespace Lorei
         {
             if (newState == true)
             {
-                label1.Text = "Enabled";
+                stateText.Text = "Enabled";
                 return;
             }
             else
             {
-                label1.Text = "Disabled";
+                stateText.Text = "Disabled";
                 return;
             }
         }
