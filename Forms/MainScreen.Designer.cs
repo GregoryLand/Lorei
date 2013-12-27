@@ -1,6 +1,6 @@
 namespace Lorei
 {
-    partial class Form1
+    partial class MainScreen
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Lorei
         private void InitializeComponent()
         {
             this.EnableButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.stateText = new System.Windows.Forms.Label();
             this.lastCommandLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -43,15 +43,15 @@ namespace Lorei
             this.EnableButton.UseVisualStyleBackColor = true;
             this.EnableButton.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label1
+            // stateText
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 33F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(182, 52);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Enabled";
+            this.stateText.AutoSize = true;
+            this.stateText.Font = new System.Drawing.Font("Microsoft Sans Serif", 33F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stateText.Location = new System.Drawing.Point(12, 12);
+            this.stateText.Name = "stateText";
+            this.stateText.Size = new System.Drawing.Size(182, 52);
+            this.stateText.TabIndex = 1;
+            this.stateText.Text = "Enabled";
             // 
             // lastCommandLabel
             // 
@@ -61,15 +61,15 @@ namespace Lorei
             this.lastCommandLabel.Size = new System.Drawing.Size(0, 13);
             this.lastCommandLabel.TabIndex = 2;
             // 
-            // Form1
+            // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(488, 98);
             this.Controls.Add(this.lastCommandLabel);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.stateText);
             this.Controls.Add(this.EnableButton);
-            this.Name = "Form1";
+            this.Name = "MainScreen";
             this.Text = "Lanaguage Operated Request and Execution Interface";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -79,7 +79,7 @@ namespace Lorei
         #endregion
 
         private System.Windows.Forms.Button EnableButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label stateText;
         private System.Windows.Forms.Label lastCommandLabel;
     }
 }

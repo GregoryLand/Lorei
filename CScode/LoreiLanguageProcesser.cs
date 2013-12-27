@@ -133,7 +133,7 @@ namespace Lorei
             m_speechRecognizer.SetInputToDefaultAudioDevice();
 
             // Call Lua Junk
-            m_luaEngine.DoFile("setup.lua");
+            m_luaEngine.DoFile("Scripts/setup.lua");
 
             // Setup Grammars
             LoadSpeechInformation();
@@ -210,7 +210,6 @@ namespace Lorei
             m_lastCommand = e.Result.Text;
             this.TextReceived(this, e);
 
-            //m_luaEngine.DoString("winamp:ToLaunch()");
             // This function calles the approprate function in the lua file so that 
             // programs can be controled from the lua script and lorei needs to know
             // nothing about the code that is ran there.
@@ -222,32 +221,34 @@ namespace Lorei
             // what i replaced.  Every program would have had to be hard coded into lorei
             // and this system works much much better.
             
-            // TODO: Add some error handleing here to clean things up.  A try catch or 2 here is really needed.
-            switch (e.Result.Grammar.Name)
+            try {
+                switch (e.Result.Grammar.Name)
+                {
+                    case "m_FunctionGrammar":
+                        string s = e.Result.Words[2].Text + ".To" + e.Result.Words[1].Text + "()";
+                        m_luaEngine.DoString(s);
+                        break;
+                    case "m_ProgramGrammar":
+
+                        // Rebuild the string from words to pass to the Lua engine.
+                        string textToPass = "";
+                        for (int x = 2; x < e.Result.Words.Count; x++)
+                        {
+                            textToPass += e.Result.Words[x].Text;
+                            textToPass += " ";
+                        }
+
+                        // If this throws make sure your scripts are correct.  capitalizion must match on RegisterLoreiProgramName and the Lua object itself
+
+                        m_luaEngine.GetFunction(e.Result.Words[1].Text + ".OnSpeechReceved").Call(textToPass);//e.Result.Words[2].Text);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception exception)
             {
-                case "m_FunctionGrammar":
-                    string s = e.Result.Words[2].Text + ".To" + e.Result.Words[1].Text + "()";
-                    //m_luaEngine.DoString("winamp.ToLaunch()");
-                    m_luaEngine.DoString(s);
-                    break;
-                case "m_ProgramGrammar":
-                    //m_luaEngine["event"] = e;
-                    //m_luaEngine.DoString(e.Result.Words[1].Text + ".OnSpeechReceved()");
-                    
-                    // Rebuild the string from words to pass to the Lua engine.
-                    string textToPass = "";
-                    for (int x = 2; x < e.Result.Words.Count; x++)
-                    {
-                        if (x > 2) textToPass += " ";
-                        textToPass += e.Result.Words[x].Text;
-                    }
-
-                    // If this throws make sure your scripts are correct.  capitalizion must match on RegisterLoreiProgramName and the Lua object itself
-                    m_luaEngine.GetFunction(e.Result.Words[1].Text + ".OnSpeechReceved").Call( textToPass );//e.Result.Words[2].Text);
-
-                    break;
-                default:
-                    break;
+                Console.WriteLine(exception.StackTrace);
             }
         }
         public void LaunchProgram(String p_program)
@@ -256,7 +257,16 @@ namespace Lorei
             {
                 // If the program isnt running start it
                 // Add the program to the dictonary and continue as normal
-                m_runningPrograms.Add(p_program, Process.Start(p_program));
+                try
+                {
+                    m_runningPrograms.Add(p_program, Process.Start(p_program));
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.StackTrace);
+                    Console.WriteLine(p_program);
+                    m_speechSynthesizer.SpeakAsync("I cannot find the specified file");
+                }
             }
             else
             {
@@ -346,7 +356,7 @@ namespace Lorei
         {
             if (m_RegistrationComplete) return;
 
-            m_luaEngine.DoFile(p_ProgramName + ".lua");
+            m_luaEngine.DoFile("Scripts/" + p_ProgramName + ".lua");
         }
         private void RegisterTemplate(string p_String, List<string> p_list)
         {
