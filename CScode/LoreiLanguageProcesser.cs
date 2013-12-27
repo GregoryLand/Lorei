@@ -14,14 +14,13 @@
  *  The class primarily focuses on the creation and handleing of 
  *  the grammer classes used to control diffrent programs.  The
  *  grammer classes are what alow the speech api to understand 
- *  english. This class also hosts the LUA scripting engine 
- *  used to read and setup the grammers required for a 
+ *  english.
+ *  This class also hosts the scripting engines that setup the
+ *  the grammers required for a 
  *  specific program this provides a large ammout of flexability 
  *  and change to programs without the need to recompile lorei. 
- *  This class acts as a interface providing LUA with the 
- *  functions that can be used in the script files. 
- *  
- * 
+ *  This class acts as a interface providing some basic methods
+ *  that the scripting engines can expose in the script files. 
  **************************************************************/
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,6 @@ using System.Speech.Synthesis;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using NLua;
 
 namespace Lorei
 {
@@ -40,8 +38,8 @@ namespace Lorei
         /************ Constructors ************/
         public LoreiLanguageProcesser()
         {
-            // Setup LUA functions
-            SetupLuaFunctions();
+            // Setup Script Engine
+            m_luaEngine = new LuaScriptProcessor(this);
 
             // Setup Variables
             SetupSpeechSynthesizer();
@@ -54,7 +52,6 @@ namespace Lorei
         }
 
         /************ Destructors ************/
-        
         /************ Methods ************/
         public void LoreiStartListening()
         {
@@ -94,28 +91,6 @@ namespace Lorei
         }
 
         /************ Helper Methods ************/
-        // Helper Methods For Lua Engine
-        private void SetupLuaFunctions()
-        {
-            // Start up the lua engine
-            m_luaEngine = new Lua();
-   
-            // Setup global functions
-            m_luaEngine.RegisterFunction("SendMessage", this, this.GetType().GetMethod("DispatchMessageToWindow"));
-            m_luaEngine.RegisterFunction("LaunchProgram", this, this.GetType().GetMethod("LaunchProgram"));
-            RegisterFunctionTemplate("ExitProgram");
-            RegisterFunctionTemplate("ExitStubbornProgram");
-            RegisterFunctionTemplate("RegisterLoreiName");
-            RegisterFunctionTemplate("RegisterLoreiFunction");
-            RegisterFunctionTemplate("RegisterProgramWithScript");
-            RegisterFunctionTemplate("RegisterLoreiProgramName");
-            RegisterFunctionTemplate("RegisterLoreiProgramCommand");
-            RegisterFunctionTemplate("SayMessage");
-        }
-        private void RegisterFunctionTemplate(string functionName)
-        {
-            m_luaEngine.RegisterFunction(functionName, this, this.GetType().GetMethod(functionName));
-        }
 
         // Helper Methods For Speech Recognition Engine
         private void SetupSpeechRecognitionEngine()
@@ -132,9 +107,6 @@ namespace Lorei
             // Bind to default audio device
             m_speechRecognizer.SetInputToDefaultAudioDevice();
 
-            // Call Lua Junk
-            m_luaEngine.DoFile("Scripts/setup.lua");
-
             // Setup Grammars
             LoadSpeechInformation();
             
@@ -147,7 +119,7 @@ namespace Lorei
             Choices keywords;
             Choices functions;
             Choices programs;
-            Choices actions;
+            //Choices actions;
             Choices programActions;
 
             // Setup Grammars
@@ -189,10 +161,13 @@ namespace Lorei
         // Helper Methods For Speech Synthesis Engine
         private void SetupSpeechSynthesizer()
         {
+            // Start speech engine
             m_speechSynthesizer = new SpeechSynthesizer();
+
+            // Do cute things with voice here
         }
 
-        // Helper Methods For Parsing Speech and Lua accessable macros
+        // Helper Methods For Parsing Speech and script Api accessible functions 
         private void ParseSpeech(SpeechRecognizedEventArgs e)
         {
             // Check if disabled by voice
@@ -210,46 +185,14 @@ namespace Lorei
             m_lastCommand = e.Result.Text;
             this.TextReceived(this, e);
 
-            // This function calles the approprate function in the lua file so that 
-            // programs can be controled from the lua script and lorei needs to know
-            // nothing about the code that is ran there.
-            // This creates a nice clean seperation between dispatch and
-            // operation. Lorei is the dispatcher and LUA is the actual thing doing
-            // all of the work. Most of the time the scripts just call back to lorei
-            // functions to do all of the actual "Work" but it still prevents a lot of
-            // boiler plate code.  This replaces alot of stupid code. Look below to see
-            // what i replaced.  Every program would have had to be hard coded into lorei
-            // and this system works much much better.
-            
-            try {
-                switch (e.Result.Grammar.Name)
-                {
-                    case "m_FunctionGrammar":
-                        string s = e.Result.Words[2].Text + ".To" + e.Result.Words[1].Text + "()";
-                        m_luaEngine.DoString(s);
-                        break;
-                    case "m_ProgramGrammar":
+            // Pass the buck
+            // Let our scripting languages have the message.
+            // TODO: Clean up this interface later
+            m_luaEngine.ParseSpeech(e);
 
-                        // Rebuild the string from words to pass to the Lua engine.
-                        string textToPass = "";
-                        for (int x = 2; x < e.Result.Words.Count; x++)
-                        {
-                            if (x > 2) textToPass += " ";
-                            textToPass += e.Result.Words[x].Text;
-                        }
-
-                        // If this throws make sure your scripts are correct.  capitalizion must match on RegisterLoreiProgramName and the Lua object itself
-                        m_luaEngine.GetFunction(e.Result.Words[1].Text + ".OnSpeechReceved").Call(textToPass);//e.Result.Words[2].Text);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.StackTrace);
-            }
         }
+
+        // Api accessable Program Control Methods
         public void LaunchProgram(String p_program)
         {
             if (!m_runningPrograms.ContainsKey(p_program) )
@@ -342,7 +285,7 @@ namespace Lorei
             return;
         }
 
-        // Lua General Script Methods
+        // Api accessible General Script Methods
         public void SayMessage(string p_Message)
         {
             // This makes the speach engine for the program say things
@@ -351,16 +294,10 @@ namespace Lorei
         }
 
         // Lua Helper Methods for Registration
-        public void RegisterProgramWithScript(string p_ProgramName) 
-        {
-            if (m_RegistrationComplete) return;
-
-            m_luaEngine.DoFile("Scripts/" + p_ProgramName + ".lua");
-        }
         private void RegisterTemplate(string p_String, List<string> p_list)
         {
             // This function is a template to create other functions because
-            // im lazy and copy paste is a bad idea so i make metafunctions...
+            // im lazy and copy paste is a bad idea so i make this...
             if (m_RegistrationComplete) return;
 
             // Check each element in list to see if new item exists already
@@ -453,8 +390,8 @@ namespace Lorei
         private bool m_Enabled = false;
         private string m_lastCommand;
 
-        // Lua Engine Data
-        Lua m_luaEngine;
+        // Scripting Data
+        LuaScriptProcessor m_luaEngine;
         bool m_RegistrationComplete = false;
     }
 }
