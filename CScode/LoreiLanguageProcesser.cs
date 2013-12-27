@@ -207,7 +207,7 @@ namespace Lorei
                 {
                     Console.WriteLine(exception.StackTrace);
                     Console.WriteLine(p_program);
-                    m_speechSynthesizer.SpeakAsync("I cannot find the specified file");
+                    m_speechSynthesizer.SpeakAsync("I cannot find the file");
                 }
             }
             else
