@@ -221,7 +221,7 @@ namespace Lorei
             // what i replaced.  Every program would have had to be hard coded into lorei
             // and this system works much much better.
             
-           // try {
+            try {
                 switch (e.Result.Grammar.Name)
                 {
                     case "m_FunctionGrammar":
@@ -244,11 +244,11 @@ namespace Lorei
                     default:
                         break;
                 }
-        //    }
-        //    catch (Exception exception)
-        //    {
-         //       Console.WriteLine(exception.StackTrace);
-        //    }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.StackTrace);
+            }
         }
         public void LaunchProgram(String p_program)
         {
