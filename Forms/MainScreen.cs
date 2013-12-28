@@ -21,7 +21,6 @@ namespace Lorei
             m_myBrain = new LoreiLanguageProcesser();
             m_myBrain.StateChanged += new ProcesserSwitchChanged(m_myBrain_StateChanged);
             m_myBrain.TextReceived += new ParseSpeech(m_myBrain_TextReceived);
-
             // Make sure lorei is waiting for a keypress to listen
             m_myBrain.Active = false;
         }

@@ -59,9 +59,34 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IronPython">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.SQLite">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\IronPython.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Wpf">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\IronPython.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="KeraLua, Version=1.3.0.0, Culture=neutral, PublicKeyToken=04d04586786c6f34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\NLua.1.3.0.2\lib\net40\x86\KeraLua.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.AspNet">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\Microsoft.Scripting.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Metadata">
+      <HintPath>packages\IronPython.2.7.4\lib\Net40\Microsoft.Scripting.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="NLua, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CScode\Delegates.cs" />
+    <Compile Include="CScode\IronPythonScriptProcessor.cs" />
     <Compile Include="CScode\LuaScriptProcessor.cs" />
     <Compile Include="CScode\ScriptProcessor.cs" />
     <Compile Include="Forms\MainScreen.cs">
@@ -126,6 +152,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Content Include="Scripts\setup.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Test.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\ventrilo.lua">

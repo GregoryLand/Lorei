@@ -40,6 +40,7 @@ namespace Lorei
         {
             // Setup Script Engine to list of engines
             m_scriptProcessors.Add( new LuaScriptProcessor(this) );
+            m_scriptProcessors.Add( new IronPythonScriptProcessor(this) );
 
             // Setup Variables
             SetupSpeechSynthesizer();
