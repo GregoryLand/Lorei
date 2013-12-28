@@ -29,7 +29,10 @@ namespace Lorei
         {
             String[] scripts = Directory.GetFiles("Scripts/");
             foreach(String script in scripts) {
-                this.DoFile(script);
+                if( script.EndsWith(".lua") )
+                {
+                    this.DoFile(script);
+                }
             }
         }
 
