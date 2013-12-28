@@ -38,8 +38,8 @@ namespace Lorei
         /************ Constructors ************/
         public LoreiLanguageProcesser()
         {
-            // Setup Script Engine
-            m_luaEngine = new LuaScriptProcessor(this);
+            // Setup Script Engine to list of engines
+            m_scriptProcessors.Add( new LuaScriptProcessor(this) );
 
             // Setup Variables
             SetupSpeechSynthesizer();
@@ -188,8 +188,10 @@ namespace Lorei
             // Pass the buck
             // Let our scripting languages have the message.
             // TODO: Clean up this interface later
-            m_luaEngine.ParseSpeech(e);
-
+            foreach (ScriptProcessor x in m_scriptProcessors)
+            {
+                x.ParseSpeech(e);
+            }
         }
 
         // Api accessable Program Control Methods
@@ -391,7 +393,7 @@ namespace Lorei
         private string m_lastCommand;
 
         // Scripting Data
-        LuaScriptProcessor m_luaEngine;
+        private List<ScriptProcessor> m_scriptProcessors = new List<ScriptProcessor>();
         bool m_RegistrationComplete = false;
     }
 }
