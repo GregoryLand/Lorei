@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 // Speech
 using System.Speech.Recognition;
 // Libs
@@ -19,9 +20,17 @@ namespace Lorei
             
             // Setup LUA functions
             SetupLuaFunctions();
+            
+            //Well this was much simpler than expected.
+            this.LoadScripts();
+        }
 
-            // not to woried about the const string since we will be killing this anyway
-            this.DoFile("Scripts/setup.lua");
+        private void LoadScripts()
+        {
+            String[] scripts = Directory.GetFiles("Scripts/");
+            foreach(String script in scripts) {
+                this.DoFile(script);
+            }
         }
 
         /************ Methods ************/
