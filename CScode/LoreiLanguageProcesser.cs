@@ -30,6 +30,7 @@ using System.Speech.Synthesis;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Lorei
 {
@@ -165,6 +166,12 @@ namespace Lorei
             m_speechSynthesizer = new SpeechSynthesizer();
 
             // Do cute things with voice here
+        }
+
+        private void getStartMenuShortCuts()
+        {
+            string[] files = Directory.GetFiles("C:\\ProgramData\\Microsoft\\Windows\\Start Menu","*.*",
+        SearchOption.AllDirectories);
         }
 
         // Helper Methods For Parsing Speech and script Api accessible functions 
@@ -376,6 +383,7 @@ namespace Lorei
         private List<String> m_Programs       = new List<string>();
         private List<String> m_Aliases        = new List<string>();
         private List<String> m_ProgramActions = new List<string>();
+        private List<String> m_ProgShortCuts  = new List<string>();
         
         // Speech Components
         //private SpeechRecognizer  m_speechRecognizer;

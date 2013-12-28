@@ -7,6 +7,7 @@ using System.IO;
 using System.Speech.Recognition;
 // Libs
 using NLua;
+using Microsoft.Win32;
 
 namespace Lorei
 {
