@@ -10,7 +10,6 @@ namespace Lorei
     interface ScriptProcessor
     {
         // Methods
-        void DoFile(string p_fileToDo);
         void ParseSpeech(SpeechRecognizedEventArgs e);
     }
 }
