@@ -36,7 +36,7 @@ namespace Lorei
 
             // Setup Scripting Languages
             m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain));
-            m_myBrain.LoadScriptProcessor(new IronPythonScriptProcessor(m_myBrain));
+            //m_myBrain.LoadScriptProcessor(new IronPythonScriptProcessor(m_myBrain));
         }
 
         void m_myBrain_TextReceived(LoreiLanguageProcesser sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)
