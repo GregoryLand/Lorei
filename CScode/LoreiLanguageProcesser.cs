@@ -30,7 +30,6 @@ using System.Speech.Synthesis;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.IO;
 
 namespace Lorei
 {
@@ -39,17 +38,11 @@ namespace Lorei
         /************ Constructors ************/
         public LoreiLanguageProcesser()
         {
-            // Setup Script Engine to list of engines
-            m_scriptProcessors.Add( new LuaScriptProcessor(this) );
-
             // Setup Variables
             SetupSpeechSynthesizer();
 
             // Setup Engine
             SetupSpeechRecognitionEngine();
-
-            // Start Lorei
-            LoreiStartListening();
         }
 
         /************ Destructors ************/
@@ -58,6 +51,8 @@ namespace Lorei
         {
             if (!m_Enabled)
             {
+                LoadSpeechInformation();
+
                 m_speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                 if (StateChanged != null) StateChanged(this, true);
                 m_Enabled = true;
@@ -72,7 +67,11 @@ namespace Lorei
                 m_Enabled = false;
             }
         }
-
+        public void LoadScriptProcessor(ScriptProcessor p_scriptProcessor)
+        {
+            m_scriptProcessors.Add(p_scriptProcessor);
+        }
+        
         // Event Handlers
         private void m_speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
@@ -107,9 +106,6 @@ namespace Lorei
 
             // Bind to default audio device
             m_speechRecognizer.SetInputToDefaultAudioDevice();
-
-            // Setup Grammars
-            LoadSpeechInformation();
             
             // Setup Event Handlers
             SetupEventHandlers();
@@ -166,12 +162,6 @@ namespace Lorei
             m_speechSynthesizer = new SpeechSynthesizer();
 
             // Do cute things with voice here
-        }
-
-        private void getStartMenuShortCuts()
-        {
-            string[] files = Directory.GetFiles("C:\\ProgramData\\Microsoft\\Windows\\Start Menu","*.*",
-        SearchOption.AllDirectories);
         }
 
         // Helper Methods For Parsing Speech and script Api accessible functions 
@@ -383,7 +373,6 @@ namespace Lorei
         private List<String> m_Programs       = new List<string>();
         private List<String> m_Aliases        = new List<string>();
         private List<String> m_ProgramActions = new List<string>();
-        private List<String> m_ProgShortCuts  = new List<string>();
         
         // Speech Components
         //private SpeechRecognizer  m_speechRecognizer;
