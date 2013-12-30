@@ -4,7 +4,7 @@
 RegisterLoreiName("System")
 RegisterLoreiName("Lorei")
 RegisterLoreiName("Viki")
-RegisterLoreiName("Endora")
+--RegisterLoreiName("Endora")
 
 --Setup Functions--
 RegisterLoreiFunction("Launch")

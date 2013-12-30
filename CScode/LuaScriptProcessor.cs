@@ -26,17 +26,6 @@ namespace Lorei
             this.LoadScripts();
         }
 
-        private void LoadScripts()
-        {
-            String[] scripts = Directory.GetFiles("Scripts/");
-            foreach(String script in scripts) {
-                if( script.EndsWith(".lua") )
-                {
-                    this.DoFile(script);
-                }
-            }
-        }
-
         /************ Methods ************/
         public void DoFile(string p_fileToDo)
         {
@@ -44,15 +33,15 @@ namespace Lorei
         }
         public void ParseSpeech(SpeechRecognizedEventArgs e)
         {
-            // This function calles the approprate function in the lua file so that 
-            // programs can be controled from the lua script and lorei needs to know
+            // This function calls the appropriate function in the Lua file so that 
+            // programs can be controlled from the lua script and Lorei needs to know
             // nothing about the code that is ran there.
-            // This creates a nice clean seperation between dispatch and
+            // This creates a nice clean separation between dispatch and
             // operation. Lorei is the dispatcher and LUA is the actual thing doing
-            // all of the work. Most of the time the scripts just call back to lorei
+            // all of the work. Most of the time the scripts just call back to Lorei
             // functions to do all of the actual "Work" but it still prevents a lot of
-            // boiler plate code.  This replaces alot of stupid code. Look below to see
-            // what i replaced.  Every program would have had to be hard coded into lorei
+            // boiler plate code.  This replaces a lot of stupid code. Look below to see
+            // what i replaced.  Every program would have had to be hard coded into Lorei
             // and this system works much much better.
             try
             {
@@ -72,7 +61,7 @@ namespace Lorei
                             textToPass += e.Result.Words[x].Text;
                         }
 
-                        // If this throws make sure your scripts are correct.  capitalizion must match on RegisterLoreiProgramName and the Lua object itself
+                        // If this throws make sure your scripts are correct.  capitalization must match on RegisterLoreiProgramName and the Lua object itself
                         m_luaEngine.GetFunction(e.Result.Words[1].Text + ".OnSpeechReceved").Call(textToPass);//e.Result.Words[2].Text);
                         break;
                     default:
@@ -112,6 +101,17 @@ namespace Lorei
         private void RegisterFunctionTemplate(string functionName)
         {
             m_luaEngine.RegisterFunction(functionName, m_owner, m_owner.GetType().GetMethod(functionName));
+        }
+        private void LoadScripts()
+        {
+            String[] scripts = Directory.GetFiles("Scripts/");
+            foreach (String script in scripts)
+            {
+                if (script.EndsWith(".lua"))
+                {
+                    this.DoFile(script);
+                }
+            }
         }
 
         /************ Data ************/

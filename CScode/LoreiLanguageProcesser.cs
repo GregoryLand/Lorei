@@ -3,21 +3,21 @@
  * Class:
  * Description:
  *  This class handles all of the logic required for lorei to
- *  opperate.  The class is currently designed around a 
- *  Dictonary that is used to store and look up created
+ *  operate.  The class is currently designed around a 
+ *  Dictionary that is used to store and look up created
  *  processes based on a file path to the launched exe.
- *  This may or maynot be the best solution but it works well.
+ *  This may or may not be the best solution but it works well.
  *     drawbacks: 1) Can only have one instance of a program 
- *                open at a time. But since i havent created a 
+ *                open at a time. But since i haven't created a 
  *                way to identify more then one program instance
  *                at a time this is a mute point.
- *  The class primarily focuses on the creation and handleing of 
- *  the grammer classes used to control diffrent programs.  The
- *  grammer classes are what alow the speech api to understand 
- *  english.
- *  This class also hosts the scripting engines that setup the
- *  the grammers required for a 
- *  specific program this provides a large ammout of flexability 
+ *  The class primarily focuses on the creation and handling of 
+ *  the grammar classes used to control different programs.  The
+ *  grammar classes are what allow the speech api to understand 
+ *  English.
+ *  This class also hosts the script engines that setup the
+ *  the grammars required for a 
+ *  specific program this provides a large amount of flexibility 
  *  and change to programs without the need to recompile lorei. 
  *  This class acts as a interface providing some basic methods
  *  that the scripting engines can expose in the script files. 
@@ -45,7 +45,7 @@ namespace Lorei
             SetupSpeechRecognitionEngine();
         }
 
-        /************ Destructors ************/
+        /************ Destructor ************/
         /************ Methods ************/
         public void LoreiStartListening()
         {
@@ -191,13 +191,13 @@ namespace Lorei
             }
         }
 
-        // Api accessable Program Control Methods
+        // Api accessible Program Control Methods
         public void LaunchProgram(String p_program)
         {
             if (!m_runningPrograms.ContainsKey(p_program) )
             {
-                // If the program isnt running start it
-                // Add the program to the dictonary and continue as normal
+                // If the program isn't running start it
+                // Add the program to the dictionary and continue as normal
                 try
                 {
                     m_runningPrograms.Add(p_program, Process.Start(p_program));
@@ -218,7 +218,7 @@ namespace Lorei
                 }
                 else
                 {
-                    // Program is still running and shouldnt me messed with
+                    // Program is still running and shouldn't me messed with
                     m_speechSynthesizer.SpeakAsync("Program Is Already Running");
                 }
             }
@@ -270,13 +270,13 @@ namespace Lorei
             int     myWParam  = p_myWParam;
             int     myLParam  = p_myLParam;
 
-            // Check and make shure the program exists because trying with a bad handle would be bad.....
+            // Check and make sure the program exists because trying with a bad handle would be bad.....
             if (m_runningPrograms.TryGetValue(p_program, out myProcess))
             {
                // With out this call to refresh the process never updates the information 
                // about windows handles so when a program creates its main window it never changes
                // the information in this class.  Evil Evil Evil thing....
-                myProcess.Refresh();  // This command took me days to find gota love msdn docs
+                myProcess.Refresh();  // This command took me days to find gotta love msdn docs
                     
                // Import the win32 send message function so we can drop messages into the program
                LoreiLanguageProcesser.PostMessage(myProcess.MainWindowHandle, myMessage, myWParam, myLParam);
@@ -287,8 +287,8 @@ namespace Lorei
         // Api accessible General Script Methods
         public void SayMessage(string p_Message)
         {
-            // This makes the speach engine for the program say things
-            // this function is made accessable to lua so scripts can say stuff
+            // This makes the speech engine for the program say things
+            // this function is made accessible to lua so scripts can say stuff
             m_speechSynthesizer.SpeakAsync(p_Message);
         }
 
@@ -345,7 +345,7 @@ namespace Lorei
         public event ParseSpeech TextReceived;
         public event ProcesserSwitchChanged StateChanged;
 
-        /************ Accessers ************/
+        /************ Accessors ************/
         public bool Active 
         {
             set
