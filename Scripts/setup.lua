@@ -9,11 +9,3 @@ RegisterLoreiName("Viki")
 --Setup Functions--
 RegisterLoreiFunction("Launch")
 RegisterLoreiFunction("Close")
-
---Setup Programs--
-RegisterProgramWithScript("Winamp")
-RegisterProgramWithScript("Command")
-RegisterProgramWithScript("Ventrilo")
-RegisterProgramWithScript("Pandora")
-RegisterProgramWithScript("Chrome")
-RegisterProgramWithScript("Visual")

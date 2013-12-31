@@ -67,12 +67,19 @@ namespace Lorei
                     default:
                         break;
                 }
+            }  
+            catch (NLua.Exceptions.LuaScriptException lse)
+            {
+                //Not sure why, but the all out exception wasn't catching this.
+                //Need a better way to choose what's running the commands. This is thrown everything somethng from AllProgramsProcessor is said.
+                //This is due to both using launch.
+                Console.WriteLine(lse.StackTrace);
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.StackTrace);
-                throw exception;
             }
+
         }
 
         /************ Helper Methods ************/

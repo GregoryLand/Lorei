@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CScode\AllProgramsProcessor.cs" />
     <Compile Include="CScode\Delegates.cs" />
     <Compile Include="CScode\LuaScriptProcessor.cs" />
     <Compile Include="CScode\ScriptProcessor.cs" />
