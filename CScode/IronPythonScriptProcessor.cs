@@ -16,7 +16,7 @@ namespace Lorei
     class IronPythonScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public IronPythonScriptProcessor(LoreiLanguageProcesser p_owner)
+        public IronPythonScriptProcessor(LoreiLanguageProcessor p_owner)
         {
             m_owner = p_owner;
 
@@ -77,6 +77,6 @@ namespace Lorei
         List<dynamic> m_listOfScopes = new List<dynamic>();
 
         // Language Processor Info
-        public LoreiLanguageProcesser m_owner;
+        public LoreiLanguageProcessor m_owner;
     }
 }

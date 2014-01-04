@@ -10,7 +10,7 @@ namespace Lorei
     class ProcessApiProvider
     {
         /************ Constructors ************/
-        public ProcessApiProvider(LoreiLanguageProcesser p_LanguageProc)
+        public ProcessApiProvider(LoreiLanguageProcessor p_LanguageProc)
         {
             m_LanguageProc = p_LanguageProc;
         }
@@ -121,6 +121,6 @@ namespace Lorei
 
         /************ Data ************/
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string, Process>();
-        LoreiLanguageProcesser m_LanguageProc;
+        LoreiLanguageProcessor m_LanguageProc;
     }
 }

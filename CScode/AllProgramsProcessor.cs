@@ -10,7 +10,7 @@ namespace Lorei
     //Pretending to be a ScriptProcessor to make things easier. It works. I hope.
     class AllProgramsProcessor : ScriptProcessor
     {
-        public AllProgramsProcessor(LoreiLanguageProcesser p_owner, ProcessApiProvider p_procApi )
+        public AllProgramsProcessor(LoreiLanguageProcessor p_owner, ProcessApiProvider p_procApi )
         {
             m_owner = p_owner;
             m_ProcApi = p_procApi;
@@ -105,7 +105,7 @@ namespace Lorei
         }
 
         ProcessApiProvider m_ProcApi;
-        LoreiLanguageProcesser m_owner;
+        LoreiLanguageProcessor m_owner;
         Dictionary<String, String> m_ListOfPrograms;
     }
 }

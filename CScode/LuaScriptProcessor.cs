@@ -14,7 +14,7 @@ namespace Lorei
     class LuaScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public LuaScriptProcessor(LoreiLanguageProcesser lorei, ProcessApiProvider p_ProcessApi)
+        public LuaScriptProcessor(LoreiLanguageProcessor lorei, ProcessApiProvider p_ProcessApi)
         {
             // Save pointer to Lorei
             m_owner = lorei;
@@ -128,7 +128,7 @@ namespace Lorei
         /************ Data ************/
         // Lua Engine Data
         Lua m_luaEngine;
-        LoreiLanguageProcesser m_owner;
+        LoreiLanguageProcessor m_owner;
         ProcessApiProvider m_ProcessApi;
     }
 }

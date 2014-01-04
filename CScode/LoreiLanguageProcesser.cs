@@ -33,10 +33,10 @@ using System.Runtime.InteropServices;
 
 namespace Lorei
 {
-    public class LoreiLanguageProcesser
+    public class LoreiLanguageProcessor
     {
         /************ Constructors ************/
-        public LoreiLanguageProcesser()
+        public LoreiLanguageProcessor()
         {
             // Setup Variables
             SetupSpeechSynthesizer();

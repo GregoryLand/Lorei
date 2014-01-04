@@ -18,7 +18,7 @@ namespace Lorei
             InitializeComponent();
 
             // Setup speech
-            m_myBrain = new LoreiLanguageProcesser();
+            m_myBrain = new LoreiLanguageProcessor();
 
             // Set the Status Label to match current state
             if (m_myBrain.Active)
@@ -43,13 +43,13 @@ namespace Lorei
             m_myBrain.LoadScriptProcessor(new AllProgramsProcessor(m_myBrain, processManager));
         }
 
-        void m_myBrain_TextReceived(LoreiLanguageProcesser sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)
+        void m_myBrain_TextReceived(LoreiLanguageProcessor sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)
         {
             this.lastCommandLabel.Text = m_myBrain.LastCommand;
         }
 
         // Events
-        private void m_myBrain_StateChanged(LoreiLanguageProcesser sender, bool newState)
+        private void m_myBrain_StateChanged(LoreiLanguageProcessor sender, bool newState)
         {
             if (newState == true)
             {
@@ -68,6 +68,6 @@ namespace Lorei
         }
 
         // Data
-        LoreiLanguageProcesser m_myBrain;
+        LoreiLanguageProcessor m_myBrain;
      }
 }
