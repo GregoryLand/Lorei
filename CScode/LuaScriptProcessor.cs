@@ -14,10 +14,11 @@ namespace Lorei
     class LuaScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public LuaScriptProcessor(LoreiLanguageProcesser lorei)
+        public LuaScriptProcessor(LoreiLanguageProcesser lorei, ProcessApiProvider p_ProcessApi)
         {
             // Save pointer to Lorei
             m_owner = lorei;
+            m_ProcessApi = p_ProcessApi;
             
             // Setup LUA functions
             SetupLuaFunctions();
@@ -89,25 +90,28 @@ namespace Lorei
             // Start up the lua engine
             m_luaEngine = new Lua();
 
-            // Setup global functions
-            m_luaEngine.RegisterFunction("SendMessage", m_owner, m_owner.GetType().GetMethod("DispatchMessageToWindow"));
-            m_luaEngine.RegisterFunction("LaunchProgram", m_owner, m_owner.GetType().GetMethod("LaunchProgram"));
+            // Setup global Lorei functions
             m_luaEngine.RegisterFunction("RegisterProgramWithScript", this, this.GetType().GetMethod("RegisterProgramWithScript"));
-            RegisterFunctionTemplate("ExitProgram");
-            RegisterFunctionTemplate("ExitStubbornProgram");
-            RegisterFunctionTemplate("RegisterLoreiName");
-            RegisterFunctionTemplate("RegisterLoreiFunction");
-            RegisterFunctionTemplate("RegisterLoreiProgramName");
-            RegisterFunctionTemplate("RegisterLoreiProgramCommand");
-            RegisterFunctionTemplate("SayMessage");
+            RegisterFunctionTemplate("RegisterLoreiName", m_owner);
+            RegisterFunctionTemplate("RegisterLoreiFunction", m_owner);
+            RegisterFunctionTemplate("RegisterLoreiProgramName", m_owner);
+            RegisterFunctionTemplate("RegisterLoreiProgramCommand", m_owner);
+            RegisterFunctionTemplate("SayMessage", m_owner);
+
+            // Setup Global Message Proc Functions
+            m_luaEngine.RegisterFunction("SendMessage", m_ProcessApi, m_ProcessApi.GetType().GetMethod("DispatchMessageToWindow"));
+            m_luaEngine.RegisterFunction("LaunchProgram", m_ProcessApi, m_ProcessApi.GetType().GetMethod("LaunchProgram"));
+            RegisterFunctionTemplate("ExitProgram", m_ProcessApi);
+            RegisterFunctionTemplate("ExitStubbornProgram", m_ProcessApi);
+
         }
         public void RegisterProgramWithScript(string p_ProgramName)
         {
             this.DoFile("Scripts/" + p_ProgramName + ".lua");
         }
-        private void RegisterFunctionTemplate(string functionName)
+        private void RegisterFunctionTemplate(string functionName, object owner)
         {
-            m_luaEngine.RegisterFunction(functionName, m_owner, m_owner.GetType().GetMethod(functionName));
+            m_luaEngine.RegisterFunction(functionName, owner, owner.GetType().GetMethod(functionName));
         }
         private void LoadScripts()
         {
@@ -125,5 +129,6 @@ namespace Lorei
         // Lua Engine Data
         Lua m_luaEngine;
         LoreiLanguageProcesser m_owner;
+        ProcessApiProvider m_ProcessApi;
     }
 }

@@ -34,10 +34,13 @@ namespace Lorei
             m_myBrain.StateChanged += new ProcesserSwitchChanged(m_myBrain_StateChanged);
             m_myBrain.TextReceived += new ParseSpeech(m_myBrain_TextReceived);
 
+            // Setup Api Stuff
+            ProcessApiProvider processManager = new ProcessApiProvider(m_myBrain);
+
             // Setup Scripting Languages
-            m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain));
+            m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain, processManager));
             m_myBrain.LoadScriptProcessor(new IronPythonScriptProcessor(m_myBrain));
-            m_myBrain.LoadScriptProcessor(new AllProgramsProcessor(m_myBrain));
+            m_myBrain.LoadScriptProcessor(new AllProgramsProcessor(m_myBrain, processManager));
         }
 
         void m_myBrain_TextReceived(LoreiLanguageProcesser sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)

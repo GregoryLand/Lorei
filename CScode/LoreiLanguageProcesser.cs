@@ -91,7 +91,6 @@ namespace Lorei
         }
 
         /************ Helper Methods ************/
-
         // Helper Methods For Speech Recognition Engine
         private void SetupSpeechRecognitionEngine()
         {
@@ -191,103 +190,6 @@ namespace Lorei
             }
         }
 
-        // Api accessible Program Control Methods
-        public void LaunchProgram(String p_program)
-        {
-            if (!m_runningPrograms.ContainsKey(p_program) )
-            {
-                // If the program isn't running start it
-                // Add the program to the dictionary and continue as normal
-                try
-                {
-                    m_runningPrograms.Add(p_program, Process.Start(p_program));
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception.StackTrace);
-                    Console.WriteLine(p_program);
-                    m_speechSynthesizer.SpeakAsync("I cannot find the file");
-                }
-            }
-            else
-            {
-                if(m_runningPrograms[p_program].HasExited)
-                {
-                    // Program has exited and can be restarted
-                    m_runningPrograms[p_program].Start();
-                }
-                else
-                {
-                    // Program is still running and shouldn't me messed with
-                    m_speechSynthesizer.SpeakAsync("Program Is Already Running");
-                }
-            }
-         
-        }
-        public void ExitProgram(String p_program)
-        {
-            // Check and see if the process exists
-            Process procToKill;
-            if ( m_runningPrograms.TryGetValue(p_program, out procToKill) )
-            {
-                // Check to make sure process is still alive.
-                procToKill.Refresh();
-
-                if (!procToKill.HasExited)
-                {
-                    // Close the main window so the program exits
-                    procToKill.CloseMainWindow();
-                }
-                // Then remove the process from the process map so we can
-                // launch the program again later.
-                m_runningPrograms.Remove(p_program);
-            }
-            // work done go home 
-        }
-        public void ExitStubbornProgram(String p_program)
-        {
-            Process procToKill;
-            if (m_runningPrograms.TryGetValue(p_program, out procToKill))
-            {
-                // Check to make sure process is still alive.
-                procToKill.Refresh();
-
-                if (!procToKill.HasExited)
-                {
-                    // Close the main window so the program exits
-                    procToKill.Kill();
-                }
-                // Then remove the process from the process map so we can
-                // launch the program again later.
-                m_runningPrograms.Remove(p_program);
-            }
-        }
-        public void DispatchMessageToWindow(String p_program, int p_myMessage, int p_myWParam, int p_myLParam)
-        {
-            // This is cool
-            Process myProcess;
-            int     myMessage = p_myMessage;
-            int     myWParam  = p_myWParam;
-            int     myLParam  = p_myLParam;
-
-            // Check and make sure the program exists because trying with a bad handle would be bad.....
-            if (m_runningPrograms.TryGetValue(p_program, out myProcess))
-            {
-                // With out this call to refresh the process never updates the information 
-                // about windows handles so when a program creates its main window it never changes
-                // the information in this class.  Evil Evil Evil thing....
-                myProcess.Refresh();  // This command took me days to find gotta love msdn docs
-                    
-                // Check to make sure our process is still alive
-                if (!myProcess.HasExited)
-                {
-                    // Import the win32 post message function so we can drop messages into the program
-                    LoreiLanguageProcesser.PostMessage(myProcess.MainWindowHandle, myMessage, myWParam, myLParam);
-                }
-            }
-            return;
-        }
-
         // Api accessible General Script Methods
         public void SayMessage(string p_Message)
         {
@@ -300,7 +202,7 @@ namespace Lorei
         private void RegisterTemplate(string p_String, List<string> p_list)
         {
             // This function is a template to create other functions because
-            // im lazy and copy paste is a bad idea so i make this...
+            // I'm lazy and copy paste is a bad idea so i make this...
             if (m_RegistrationComplete) return;
 
             // Check each element in list to see if new item exists already
@@ -336,12 +238,6 @@ namespace Lorei
             // Set flag so we disable all register functions
             m_RegistrationComplete = true;
         }
-
-        // Imported Stuff
-        //[DllImport("user32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Auto)]
-        //private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-        [DllImport("user32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Auto)]
-        private static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
         /************ Constants ************/
 
@@ -388,7 +284,6 @@ namespace Lorei
         private Grammar m_ProgramGrammar;
 
         // Program Control Data
-        private Dictionary<String, Process> m_runningPrograms = new Dictionary<string,Process>();
         private bool m_disabledByVoice = false;
         private bool m_Enabled = false;
         private string m_lastCommand;

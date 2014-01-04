@@ -103,6 +103,7 @@
     <Compile Include="CScode\Delegates.cs" />
     <Compile Include="CScode\IronPythonScriptProcessor.cs" />
     <Compile Include="CScode\LuaScriptProcessor.cs" />
+    <Compile Include="CScode\ProcessApiProvider.cs" />
     <Compile Include="CScode\ScriptProcessor.cs" />
     <Compile Include="Forms\MainScreen.cs">
       <SubType>Form</SubType>

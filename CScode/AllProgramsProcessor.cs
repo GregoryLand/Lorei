@@ -10,9 +10,10 @@ namespace Lorei
     //Pretending to be a ScriptProcessor to make things easier. It works. I hope.
     class AllProgramsProcessor : ScriptProcessor
     {
-        public AllProgramsProcessor(LoreiLanguageProcesser lorei)
+        public AllProgramsProcessor(LoreiLanguageProcesser p_owner, ProcessApiProvider p_procApi )
         {
-            m_owner = lorei;
+            m_owner = p_owner;
+            m_ProcApi = p_procApi;
 
             //Get the list of programs. Returns a List with keyvalue pairs of just the shortcut name, Full path
             m_ListOfPrograms = GetAllShortcuts();
@@ -82,15 +83,13 @@ namespace Lorei
         private void LaunchProgram(string key)
         {
             if (m_ListOfPrograms.ContainsKey(key))
-                m_owner.LaunchProgram(m_ListOfPrograms[key]);
+                m_ProcApi.LaunchProgram(m_ListOfPrograms[key]);
         }
         private void ExitProgram(string key)
         {
             if (m_ListOfPrograms.ContainsKey(key))
-                m_owner.ExitProgram(m_ListOfPrograms[key]);
+                m_ProcApi.ExitProgram(m_ListOfPrograms[key]);
         }
-
-      
 
         //This is allow scripts to be able to grab a path based on the program name, rather than a hardcoded path.
         public String GetFilePath(String key)
@@ -105,6 +104,7 @@ namespace Lorei
             return value;
         }
 
+        ProcessApiProvider m_ProcApi;
         LoreiLanguageProcesser m_owner;
         Dictionary<String, String> m_ListOfPrograms;
     }
