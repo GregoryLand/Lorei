@@ -273,13 +273,17 @@ namespace Lorei
             // Check and make sure the program exists because trying with a bad handle would be bad.....
             if (m_runningPrograms.TryGetValue(p_program, out myProcess))
             {
-               // With out this call to refresh the process never updates the information 
-               // about windows handles so when a program creates its main window it never changes
-               // the information in this class.  Evil Evil Evil thing....
+                // With out this call to refresh the process never updates the information 
+                // about windows handles so when a program creates its main window it never changes
+                // the information in this class.  Evil Evil Evil thing....
                 myProcess.Refresh();  // This command took me days to find gotta love msdn docs
                     
-               // Import the win32 send message function so we can drop messages into the program
-               LoreiLanguageProcesser.PostMessage(myProcess.MainWindowHandle, myMessage, myWParam, myLParam);
+                // Check to make sure our process is still alive
+                if (!myProcess.HasExited)
+                {
+                    // Import the win32 post message function so we can drop messages into the program
+                    LoreiLanguageProcesser.PostMessage(myProcess.MainWindowHandle, myMessage, myWParam, myLParam);
+                }
             }
             return;
         }
