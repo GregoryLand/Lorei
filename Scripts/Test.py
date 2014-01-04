@@ -5,4 +5,4 @@ import LoreiApi
 
 def Simple():
 	System.Windows.Forms.MessageBox.Show("Hello World")
-	#LoreiApi.SayMessage("Hello From Python")
+	LoreiApi.SayMessage("Hello From Python")

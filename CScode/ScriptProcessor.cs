@@ -7,7 +7,7 @@ using System.Speech.Recognition;
 
 namespace Lorei
 {
-    interface ScriptProcessor
+    public interface ScriptProcessor
     {
         // Methods
         void ParseSpeech(SpeechRecognizedEventArgs e);

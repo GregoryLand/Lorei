@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 
 namespace Lorei
 {
-    class LoreiLanguageProcesser
+    public class LoreiLanguageProcesser
     {
         /************ Constructors ************/
         public LoreiLanguageProcesser()
