@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Lorei
 {
-    class ProcessApiProvider
+    class ProcessApiProvider : ApiProvider
     {
         /************ Constructors ************/
         public ProcessApiProvider(TextToSpeechApiProvider p_textToSpeechApi)

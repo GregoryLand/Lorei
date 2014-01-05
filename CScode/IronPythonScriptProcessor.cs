@@ -16,9 +16,10 @@ namespace Lorei
     class IronPythonScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public IronPythonScriptProcessor(LoreiLanguageProcessor p_owner)
+        public IronPythonScriptProcessor(LoreiLanguageProcessor p_owner, ApiDictionary apiDictionary)
         {
             m_owner = p_owner;
+            m_apiDictionary = apiDictionary;
 
             // Setup Assemblies
             // Could try catch here but without this mscorlib.dll we are screwed 6 ways till Sunday
@@ -30,6 +31,7 @@ namespace Lorei
 
             // Setup python
             m_pythonEngine.Globals.SetVariable("LoreiApi", m_owner);  // This passes Lorei to the python world
+            m_pythonEngine.Globals.SetVariable("ApiDictionary", m_apiDictionary); //This passes the rest of the api to python
 
             this.ExecuteEachScript();
         }
@@ -78,5 +80,6 @@ namespace Lorei
 
         // Language Processor Info
         public LoreiLanguageProcessor m_owner;
+        public ApiDictionary m_apiDictionary;
     }
 }

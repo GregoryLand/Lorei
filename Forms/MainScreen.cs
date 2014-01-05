@@ -18,12 +18,10 @@ namespace Lorei
             InitializeComponent();
 
             // Setup Api Stuff
-            TextToSpeechApiProvider textToSpeechApi = new TextToSpeechApiProvider();
-            ProcessApiProvider processManager = new ProcessApiProvider(textToSpeechApi);
-            LoggingApiProvider loggingManager = new LoggingApiProvider();
+            ApiDictionary apiDictionary = new ApiDictionary();
 
             // Setup speech
-            m_myBrain = new LoreiLanguageProcessor(textToSpeechApi);
+            m_myBrain = new LoreiLanguageProcessor(apiDictionary);
 
             // Set the Status Label to match current state
             if (m_myBrain.Active)
@@ -40,9 +38,9 @@ namespace Lorei
             m_myBrain.TextReceived += new ParseSpeech(m_myBrain_TextReceived);
 
             // Setup Scripting Languages
-            m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain, textToSpeechApi, processManager));
-            m_myBrain.LoadScriptProcessor(new IronPythonScriptProcessor(m_myBrain));
-            m_myBrain.LoadScriptProcessor(new AllProgramsProcessor(m_myBrain, processManager));
+            m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain, apiDictionary));
+            m_myBrain.LoadScriptProcessor(new IronPythonScriptProcessor(m_myBrain, apiDictionary));
+            m_myBrain.LoadScriptProcessor(new AllProgramsProcessor(m_myBrain, apiDictionary));
         }
 
         void m_myBrain_TextReceived(LoreiLanguageProcessor sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)

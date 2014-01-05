@@ -14,12 +14,12 @@ namespace Lorei
     class LuaScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public LuaScriptProcessor(LoreiLanguageProcessor lorei, TextToSpeechApiProvider p_textToSpeechApi, ProcessApiProvider p_ProcessApi)
+        public LuaScriptProcessor(LoreiLanguageProcessor lorei, ApiDictionary apiDictionary)
         {
             // Save pointer to Lorei
             m_owner = lorei;
-            m_ProcessApi = p_ProcessApi;
-            m_textToSpeechApi = p_textToSpeechApi;
+            m_ProcessApi = (ProcessApiProvider)apiDictionary.getApiProvider("ProcessApi");
+            m_textToSpeechApi = (TextToSpeechApiProvider)apiDictionary.getApiProvider("TextToSpeechApi");
 
             // Setup LUA functions
             SetupLuaFunctions();

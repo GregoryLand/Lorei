@@ -6,7 +6,7 @@ using System.Speech.Synthesis;
 
 namespace Lorei
 {
-    public class TextToSpeechApiProvider
+    public class TextToSpeechApiProvider : ApiProvider
     {
         /************ Constructors ************/
         public TextToSpeechApiProvider()

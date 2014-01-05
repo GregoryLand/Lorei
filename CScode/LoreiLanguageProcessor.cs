@@ -37,9 +37,9 @@ namespace Lorei
     public class LoreiLanguageProcessor
     {
         /************ Constructors ************/
-        public LoreiLanguageProcessor(TextToSpeechApiProvider p_textToSpeechApi)
+        public LoreiLanguageProcessor(ApiDictionary apiDictionary)
         {
-            m_textToSpeechApi = p_textToSpeechApi;
+            m_textToSpeechApi = (TextToSpeechApiProvider)apiDictionary.getApiProvider("TextToSpeechApi");
 
             log4net.Config.XmlConfigurator.Configure();
             log = LogManager.GetLogger(typeof(LoreiLanguageProcessor));

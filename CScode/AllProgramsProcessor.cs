@@ -10,10 +10,10 @@ namespace Lorei
     //Pretending to be a ScriptProcessor to make things easier. It works. I hope.
     class AllProgramsProcessor : ScriptProcessor
     {
-        public AllProgramsProcessor(LoreiLanguageProcessor p_owner, ProcessApiProvider p_procApi )
+        public AllProgramsProcessor(LoreiLanguageProcessor p_owner, ApiDictionary apiDictionary)
         {
             m_owner = p_owner;
-            m_ProcApi = p_procApi;
+            m_ProcApi = (ProcessApiProvider)apiDictionary.getApiProvider("ProcessApi");
 
             //Get the list of programs. Returns a List with keyvalue pairs of just the shortcut name, Full path
             m_ListOfPrograms = GetAllShortcuts();
