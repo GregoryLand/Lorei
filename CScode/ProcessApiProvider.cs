@@ -10,9 +10,9 @@ namespace Lorei
     class ProcessApiProvider
     {
         /************ Constructors ************/
-        public ProcessApiProvider(LoreiLanguageProcessor p_LanguageProc)
+        public ProcessApiProvider(TextToSpeechApiProvider p_textToSpeechApi)
         {
-            m_LanguageProc = p_LanguageProc;
+            m_textToSpeechApi = p_textToSpeechApi;
         }
 
         /************ Destructor ************/
@@ -32,7 +32,7 @@ namespace Lorei
                 {
                     Console.WriteLine(exception.StackTrace);
                     Console.WriteLine(p_program);
-                    m_LanguageProc.SayMessage("I cannot find the file");
+                    m_textToSpeechApi.SayMessage("I cannot find the file");
                 }
             }
             else
@@ -45,7 +45,7 @@ namespace Lorei
                 else
                 {
                     // Program is still running and shouldn't me messed with
-                    m_LanguageProc.SayMessage("Program Is Already Running");
+                    m_textToSpeechApi.SayMessage("Program Is Already Running");
                 }
             }
 
@@ -121,6 +121,6 @@ namespace Lorei
 
         /************ Data ************/
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string, Process>();
-        LoreiLanguageProcessor m_LanguageProc;
+        TextToSpeechApiProvider m_textToSpeechApi;
     }
 }

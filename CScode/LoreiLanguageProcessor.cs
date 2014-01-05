@@ -36,10 +36,9 @@ namespace Lorei
     public class LoreiLanguageProcessor
     {
         /************ Constructors ************/
-        public LoreiLanguageProcessor()
+        public LoreiLanguageProcessor(TextToSpeechApiProvider p_textToSpeechApi)
         {
-            // Setup Variables
-            SetupSpeechSynthesizer();
+            m_textToSpeechApi = p_textToSpeechApi;
 
             // Setup Engine
             SetupSpeechRecognitionEngine();
@@ -76,7 +75,7 @@ namespace Lorei
         private void m_speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             // Interaction Message
-            m_speechSynthesizer.SpeakAsync("Ok!");
+            m_textToSpeechApi.SayMessage("Ok!");
             
             // Parse Speech
             ParseSpeech(e);
@@ -86,7 +85,7 @@ namespace Lorei
             // If we knew any words
             if (e.Result.Words.Count > 0)
             {
-                m_speechSynthesizer.SpeakAsync("What?");
+                m_textToSpeechApi.SayMessage("What?");
             }
         }
 
@@ -99,9 +98,9 @@ namespace Lorei
 
             if (m_speechRecognizer == null)
             {
-                m_speechSynthesizer.SpeakAsync("Speech Recognizer Creation Failed is Null");
+                m_textToSpeechApi.SayMessage("Speech Recognizer Creation Failed is Null");
             }
-            else m_speechSynthesizer.SpeakAsync("Speech Recognizer Created");
+            else m_textToSpeechApi.SayMessage("Speech Recognizer Created");
 
             // Bind to default audio device
             m_speechRecognizer.SetInputToDefaultAudioDevice();
@@ -154,15 +153,6 @@ namespace Lorei
             m_speechRecognizer.SpeechRecognitionRejected += new EventHandler<SpeechRecognitionRejectedEventArgs>(m_speechRecognizer_SpeechRecognitionRejected);
         }
 
-        // Helper Methods For Speech Synthesis Engine
-        private void SetupSpeechSynthesizer()
-        {
-            // Start speech engine
-            m_speechSynthesizer = new SpeechSynthesizer();
-
-            // Do cute things with voice here
-        }
-
         // Helper Methods For Parsing Speech and script Api accessible functions 
         private void ParseSpeech(SpeechRecognizedEventArgs e)
         {
@@ -188,14 +178,6 @@ namespace Lorei
             {
                 x.ParseSpeech(e);
             }
-        }
-
-        // Api accessible General Script Methods
-        public void SayMessage(string p_Message)
-        {
-            // This makes the speech engine for the program say things
-            // this function is made accessible to lua so scripts can say stuff
-            m_speechSynthesizer.SpeakAsync(p_Message);
         }
 
         // Lua Helper Methods for Registration
@@ -275,9 +257,7 @@ namespace Lorei
         private List<String> m_ProgramActions = new List<string>();
         
         // Speech Components
-        //private SpeechRecognizer  m_speechRecognizer;
         private SpeechRecognitionEngine m_speechRecognizer;
-        private SpeechSynthesizer m_speechSynthesizer;
         private GrammarBuilder    m_FunctionExecution;
         private GrammarBuilder    m_ProgramControl;
         private Grammar m_FunctionGrammar;
@@ -290,6 +270,7 @@ namespace Lorei
 
         // Scripting Data
         private List<ScriptProcessor> m_scriptProcessors = new List<ScriptProcessor>();
+        private TextToSpeechApiProvider m_textToSpeechApi;
         bool m_RegistrationComplete = false;
     }
 }

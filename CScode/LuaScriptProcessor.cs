@@ -14,12 +14,13 @@ namespace Lorei
     class LuaScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public LuaScriptProcessor(LoreiLanguageProcessor lorei, ProcessApiProvider p_ProcessApi)
+        public LuaScriptProcessor(LoreiLanguageProcessor lorei, TextToSpeechApiProvider p_textToSpeechApi, ProcessApiProvider p_ProcessApi)
         {
             // Save pointer to Lorei
             m_owner = lorei;
             m_ProcessApi = p_ProcessApi;
-            
+            m_textToSpeechApi = p_textToSpeechApi;
+
             // Setup LUA functions
             SetupLuaFunctions();
             
@@ -96,7 +97,9 @@ namespace Lorei
             RegisterFunctionTemplate("RegisterLoreiFunction", m_owner);
             RegisterFunctionTemplate("RegisterLoreiProgramName", m_owner);
             RegisterFunctionTemplate("RegisterLoreiProgramCommand", m_owner);
-            RegisterFunctionTemplate("SayMessage", m_owner);
+            
+            // Setup Global Text to speech functions
+            RegisterFunctionTemplate("SayMessage", m_textToSpeechApi);
 
             // Setup Global Message Proc Functions
             m_luaEngine.RegisterFunction("SendMessage", m_ProcessApi, m_ProcessApi.GetType().GetMethod("DispatchMessageToWindow"));
@@ -130,5 +133,6 @@ namespace Lorei
         Lua m_luaEngine;
         LoreiLanguageProcessor m_owner;
         ProcessApiProvider m_ProcessApi;
+        TextToSpeechApiProvider m_textToSpeechApi;
     }
 }

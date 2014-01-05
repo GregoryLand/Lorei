@@ -17,8 +17,12 @@ namespace Lorei
         {
             InitializeComponent();
 
+            // Setup Api Stuff
+            TextToSpeechApiProvider textToSpeechApi = new TextToSpeechApiProvider();
+            ProcessApiProvider processManager = new ProcessApiProvider(textToSpeechApi);
+
             // Setup speech
-            m_myBrain = new LoreiLanguageProcessor();
+            m_myBrain = new LoreiLanguageProcessor(textToSpeechApi);
 
             // Set the Status Label to match current state
             if (m_myBrain.Active)
@@ -34,11 +38,8 @@ namespace Lorei
             m_myBrain.StateChanged += new ProcesserSwitchChanged(m_myBrain_StateChanged);
             m_myBrain.TextReceived += new ParseSpeech(m_myBrain_TextReceived);
 
-            // Setup Api Stuff
-            ProcessApiProvider processManager = new ProcessApiProvider(m_myBrain);
-
             // Setup Scripting Languages
-            m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain, processManager));
+            m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain, textToSpeechApi, processManager));
             m_myBrain.LoadScriptProcessor(new IronPythonScriptProcessor(m_myBrain));
             m_myBrain.LoadScriptProcessor(new AllProgramsProcessor(m_myBrain, processManager));
         }
