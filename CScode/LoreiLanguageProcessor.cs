@@ -30,6 +30,7 @@ using System.Speech.Synthesis;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using log4net;
 
 namespace Lorei
 {
@@ -39,6 +40,9 @@ namespace Lorei
         public LoreiLanguageProcessor(TextToSpeechApiProvider p_textToSpeechApi)
         {
             m_textToSpeechApi = p_textToSpeechApi;
+
+            log4net.Config.XmlConfigurator.Configure();
+            log = LogManager.GetLogger(typeof(LoreiLanguageProcessor));
 
             // Setup Engine
             SetupSpeechRecognitionEngine();
@@ -55,6 +59,7 @@ namespace Lorei
                 m_speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                 if (StateChanged != null) StateChanged(this, true);
                 m_Enabled = true;
+                log.Info("Lorei has started listening.");
             }
         }
         public void LoreiStopListening()
@@ -64,11 +69,13 @@ namespace Lorei
                 m_speechRecognizer.RecognizeAsyncCancel();
                 if (StateChanged != null) StateChanged(this, false);
                 m_Enabled = false;
+                log.Info("Lorei has stopped listening.");
             }
         }
         public void LoadScriptProcessor(ScriptProcessor p_scriptProcessor)
         {
             m_scriptProcessors.Add(p_scriptProcessor);
+            log.Info(p_scriptProcessor + " has been added to the list of Script Processors.");
         }
         
         // Event Handlers
@@ -79,6 +86,7 @@ namespace Lorei
             
             // Parse Speech
             ParseSpeech(e);
+            log.Info("Message: " + e.Result.Text);
         }
         private void m_speechRecognizer_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)
         {
@@ -99,14 +107,18 @@ namespace Lorei
             if (m_speechRecognizer == null)
             {
                 m_textToSpeechApi.SayMessage("Speech Recognizer Creation Failed is Null");
+                log.Error("Speech Recognizer has failed to created.");
             }
-            else m_textToSpeechApi.SayMessage("Speech Recognizer Created");
+            else
+            {
+                m_textToSpeechApi.SayMessage("Speech Recognizer Created");
+                
+                // Bind to default audio device
+                m_speechRecognizer.SetInputToDefaultAudioDevice();
 
-            // Bind to default audio device
-            m_speechRecognizer.SetInputToDefaultAudioDevice();
-            
-            // Setup Event Handlers
-            SetupEventHandlers();
+                // Setup Event Handlers
+                SetupEventHandlers();
+            }
         }
         private void LoadSpeechInformation()
         {
@@ -219,6 +231,7 @@ namespace Lorei
 
             // Set flag so we disable all register functions
             m_RegistrationComplete = true;
+            log.Info("Registration is complete.");
         }
 
         /************ Constants ************/
@@ -272,5 +285,8 @@ namespace Lorei
         private List<ScriptProcessor> m_scriptProcessors = new List<ScriptProcessor>();
         private TextToSpeechApiProvider m_textToSpeechApi;
         bool m_RegistrationComplete = false;
+
+        //Logging Data
+        private static ILog log;
     }
 }
