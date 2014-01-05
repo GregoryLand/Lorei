@@ -71,8 +71,12 @@
     <Reference Include="IronPython.Wpf">
       <HintPath>packages\IronPython.2.7.4\lib\Net40\IronPython.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="KeraLua, Version=1.3.0.0, Culture=neutral, PublicKeyToken=04d04586786c6f34, processorArchitecture=MSIL">
+    <Reference Include="KeraLua">
       <HintPath>packages\NLua.1.3.0.2\lib\net40\x86\KeraLua.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Dynamic">
@@ -87,7 +91,7 @@
     <Reference Include="Microsoft.Scripting.Metadata">
       <HintPath>packages\IronPython.2.7.4\lib\Net40\Microsoft.Scripting.Metadata.dll</HintPath>
     </Reference>
-    <Reference Include="NLua, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
+    <Reference Include="NLua">
       <HintPath>packages\NLua.1.3.0.2\lib\net40\x86\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -201,7 +205,8 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /s /y "$(SolutionDir)packages\NLua.1.3.0.2\lib\native\x64\*.*" "$(TargetDir)"
-</PostBuildEvent>
+
+xcopy /s /y "C:\Users\Skylar\Documents\GitHub\Lorei\packages\NLua.1.3.0.2\lib\native\x64\*.*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
