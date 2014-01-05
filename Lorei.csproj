@@ -106,6 +106,7 @@
     <Compile Include="CScode\AllProgramsProcessor.cs" />
     <Compile Include="CScode\Delegates.cs" />
     <Compile Include="CScode\IronPythonScriptProcessor.cs" />
+    <Compile Include="CScode\LoggingApiProvider.cs" />
     <Compile Include="CScode\LuaScriptProcessor.cs" />
     <Compile Include="CScode\ProcessApiProvider.cs" />
     <Compile Include="CScode\ScriptProcessor.cs" />
