@@ -20,6 +20,7 @@ namespace Lorei
             // Setup Api Stuff
             TextToSpeechApiProvider textToSpeechApi = new TextToSpeechApiProvider();
             ProcessApiProvider processManager = new ProcessApiProvider(textToSpeechApi);
+            LoggingApiProvider loggingManager = new LoggingApiProvider();
 
             // Setup speech
             m_myBrain = new LoreiLanguageProcessor(textToSpeechApi);
