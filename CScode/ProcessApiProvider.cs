@@ -119,6 +119,21 @@ namespace Lorei
         [DllImport("user32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Auto)]
         private static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
+        /************ Api Provider Interface ************/
+        public List<System.Reflection.MethodInfo> GetMethods()
+        {
+            List<System.Reflection.MethodInfo> methods = new List<System.Reflection.MethodInfo>();
+
+            // Setup the list
+            methods.Add(this.GetType().GetMethod("LaunchProgram"));
+            methods.Add(this.GetType().GetMethod("ExitProgram"));
+            methods.Add(this.GetType().GetMethod("ExitStubbornProgram"));
+            methods.Add(this.GetType().GetMethod("DispatchMessageToWindow"));
+
+            return methods;
+        }
+
+
         /************ Data ************/
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string, Process>();
         TextToSpeechApiProvider m_textToSpeechApi;

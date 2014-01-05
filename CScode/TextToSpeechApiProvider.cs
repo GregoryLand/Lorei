@@ -24,6 +24,18 @@ namespace Lorei
             m_speechSynthesizer.SpeakAsync(p_Message);
         }
 
+        /************ Api Provider Interface ************/
+        public List<System.Reflection.MethodInfo> GetMethods()
+        {
+            List<System.Reflection.MethodInfo> methods = new List<System.Reflection.MethodInfo>();
+
+            // Setup the list
+            methods.Add(this.GetType().GetMethod("SayMessage"));
+
+            return methods;
+        }
+
+
         /************ Helper Methods ************/
         // Helper Methods For Speech Synthesis Engine
         private void SetupSpeechSynthesizer()
@@ -33,6 +45,8 @@ namespace Lorei
 
             // Do cute things with voice here
         }
+
+
 
         // Speech Components
         private SpeechSynthesizer m_speechSynthesizer;

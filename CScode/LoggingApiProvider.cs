@@ -14,6 +14,7 @@ namespace Lorei
             log = LogManager.GetLogger(typeof(LoggingApiProvider));
         }
 
+        /************ Methods ************/
         public void Info(String infoString)
         {
             log.Info(infoString);
@@ -29,6 +30,22 @@ namespace Lorei
             log.Debug(debugString);
         }
 
+        /************ Api Provider Interface ************/
+        public List<System.Reflection.MethodInfo> GetMethods()
+        {
+            List<System.Reflection.MethodInfo> methods = new List<System.Reflection.MethodInfo>();
+
+            // Setup the list
+            methods.Add( this.GetType().GetMethod("Info") );
+            methods.Add( this.GetType().GetMethod("Error") );
+            methods.Add( this.GetType().GetMethod("Debug") );
+
+            return methods;
+        }
+
+        /************ Data ************/
         private static ILog log;
+
+
     }
 }
