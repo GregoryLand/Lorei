@@ -88,7 +88,7 @@ namespace Lorei
                 m_runningPrograms.Remove(p_program);
             }
         }
-        public void DispatchMessageToWindow(String p_program, int p_myMessage, int p_myWParam, int p_myLParam)
+        public void SendMessage(String p_program, int p_myMessage, int p_myWParam, int p_myLParam)
         {
             // This is cool
             Process myProcess;
@@ -118,6 +118,21 @@ namespace Lorei
         // We use post message instead of send message for threading reasons. Post message is Async
         [DllImport("user32.dll", CallingConvention = CallingConvention.Winapi, CharSet = CharSet.Auto)]
         private static extern IntPtr PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
+        /************ Api Provider Interface ************/
+        public List<System.Reflection.MethodInfo> GetMethods()
+        {
+            List<System.Reflection.MethodInfo> methods = new List<System.Reflection.MethodInfo>();
+
+            // Setup the list
+            methods.Add(this.GetType().GetMethod("LaunchProgram"));
+            methods.Add(this.GetType().GetMethod("ExitProgram"));
+            methods.Add(this.GetType().GetMethod("ExitStubbornProgram"));
+            methods.Add(this.GetType().GetMethod("SendMessage"));
+
+            return methods;
+        }
+
 
         /************ Data ************/
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string, Process>();
