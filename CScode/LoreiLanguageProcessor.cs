@@ -34,15 +34,15 @@ using log4net;
 
 namespace Lorei
 {
-    public class LoreiLanguageProcessor
+    public class LoreiLanguageProvider: ApiProvider
     {
         /************ Constructors ************/
-        public LoreiLanguageProcessor(ApiDictionary apiDictionary)
+        public LoreiLanguageProvider(TextToSpeechApiProvider p_textToSpeechApi)
         {
-            m_textToSpeechApi = (TextToSpeechApiProvider)apiDictionary.getApiProvider("TextToSpeechApi");
+            m_textToSpeechApi = p_textToSpeechApi;
 
             log4net.Config.XmlConfigurator.Configure();
-            log = LogManager.GetLogger(typeof(LoreiLanguageProcessor));
+            log = LogManager.GetLogger(typeof(LoreiLanguageProvider));
 
             // Setup Engine
             SetupSpeechRecognitionEngine();
@@ -77,7 +77,50 @@ namespace Lorei
             m_scriptProcessors.Add(p_scriptProcessor);
             log.Info(p_scriptProcessor + " has been added to the list of Script Processors.");
         }
-        
+
+        //Methods for Registration Api
+        public void RegisterLoreiName(string p_NameForLorei)
+        {
+            // Do the work.... shame to need a function for this
+            RegisterTemplate(p_NameForLorei, m_Keywords);
+        }
+        public void RegisterLoreiFunction(string p_NameOfFunction)
+        {
+            RegisterTemplate(p_NameOfFunction, m_Functions);
+        }
+        public void RegisterLoreiProgramName(string p_NameOfProgram)
+        {
+            RegisterTemplate(p_NameOfProgram, m_Programs);
+        }
+        public void RegisterLoreiProgramCommand(string p_NameOfProgramCommand)
+        {
+            RegisterTemplate(p_NameOfProgramCommand, m_ProgramActions);
+        }
+        public void RegistrationDone()
+        {
+            // Check to see if i should be called
+            if (m_RegistrationComplete) return;
+
+            // Set flag so we disable all register functions
+            m_RegistrationComplete = true;
+            log.Info("Registration is complete.");
+        }
+
+        /************ Api Provider Interface ************/
+        public List<System.Reflection.MethodInfo> GetMethods()
+        {
+            List<System.Reflection.MethodInfo> methods = new List<System.Reflection.MethodInfo>();
+
+            // Setup the list
+            methods.Add(this.GetType().GetMethod("RegisterLoreiName"));
+            methods.Add(this.GetType().GetMethod("RegisterLoreiFunction"));
+            methods.Add(this.GetType().GetMethod("RegisterLoreiProgramName"));
+            methods.Add(this.GetType().GetMethod("RegisterLoreiProgramCommand"));
+            methods.Add(this.GetType().GetMethod("RegistrationDone"));
+
+            return methods;
+        }
+
         // Event Handlers
         private void m_speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
@@ -164,6 +207,20 @@ namespace Lorei
             m_speechRecognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(m_speechRecognizer_SpeechRecognized);
             m_speechRecognizer.SpeechRecognitionRejected += new EventHandler<SpeechRecognitionRejectedEventArgs>(m_speechRecognizer_SpeechRecognitionRejected);
         }
+        private void RegisterTemplate(string p_String, List<string> p_list)
+        {
+            // This function is a template to create other functions because
+            // I'm lazy and copy paste is a bad idea so i make this...
+            if (m_RegistrationComplete) return;
+
+            // Check each element in list to see if new item exists already
+            foreach (string x in p_list)
+            {
+                if (x == p_String) return;
+            }
+
+            p_list.Add(p_String);
+        }
 
         // Helper Methods For Parsing Speech and script Api accessible functions 
         private void ParseSpeech(SpeechRecognizedEventArgs e)
@@ -190,48 +247,6 @@ namespace Lorei
             {
                 x.ParseSpeech(e);
             }
-        }
-
-        // Lua Helper Methods for Registration
-        private void RegisterTemplate(string p_String, List<string> p_list)
-        {
-            // This function is a template to create other functions because
-            // I'm lazy and copy paste is a bad idea so i make this...
-            if (m_RegistrationComplete) return;
-
-            // Check each element in list to see if new item exists already
-            foreach (string x in p_list)
-            {
-                if (x == p_String) return;
-            }
-
-            p_list.Add(p_String);
-        }
-        public void RegisterLoreiName(string p_NameForLorei) 
-        {
-            // Do the work.... shame to need a function for this
-            RegisterTemplate(p_NameForLorei, m_Keywords);
-        }
-        public void RegisterLoreiFunction(string p_NameOfFunction) 
-        {
-            RegisterTemplate(p_NameOfFunction, m_Functions);
-        }
-        public void RegisterLoreiProgramName(string p_NameOfProgram) 
-        {
-            RegisterTemplate(p_NameOfProgram, m_Programs);
-        }
-        public void RegisterLoreiProgramCommand(string p_NameOfProgramCommand) 
-        {
-            RegisterTemplate(p_NameOfProgramCommand, m_ProgramActions);
-        }
-        public void RegistrationDone() 
-        {
-            // Check to see if i should be called
-            if (m_RegistrationComplete) return;
-
-            // Set flag so we disable all register functions
-            m_RegistrationComplete = true;
-            log.Info("Registration is complete.");
         }
 
         /************ Constants ************/
@@ -285,7 +300,7 @@ namespace Lorei
         private List<ScriptProcessor> m_scriptProcessors = new List<ScriptProcessor>();
         private TextToSpeechApiProvider m_textToSpeechApi;
         bool m_RegistrationComplete = false;
-
+        
         //Logging Data
         private static ILog log;
     }

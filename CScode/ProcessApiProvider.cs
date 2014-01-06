@@ -88,7 +88,7 @@ namespace Lorei
                 m_runningPrograms.Remove(p_program);
             }
         }
-        public void DispatchMessageToWindow(String p_program, int p_myMessage, int p_myWParam, int p_myLParam)
+        public void SendMessage(String p_program, int p_myMessage, int p_myWParam, int p_myLParam)
         {
             // This is cool
             Process myProcess;
@@ -128,7 +128,7 @@ namespace Lorei
             methods.Add(this.GetType().GetMethod("LaunchProgram"));
             methods.Add(this.GetType().GetMethod("ExitProgram"));
             methods.Add(this.GetType().GetMethod("ExitStubbornProgram"));
-            methods.Add(this.GetType().GetMethod("DispatchMessageToWindow"));
+            methods.Add(this.GetType().GetMethod("SendMessage"));
 
             return methods;
         }

@@ -16,9 +16,9 @@ namespace Lorei
     class IronPythonScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public IronPythonScriptProcessor(LoreiLanguageProcessor p_owner, ApiDictionary apiDictionary)
+        public IronPythonScriptProcessor(IDictionary<string, ApiProvider> apiDictionary)
         {
-            m_owner = p_owner;
+            //m_owner = p_owner;
             m_apiDictionary = apiDictionary;
 
             // Setup Assemblies
@@ -30,8 +30,13 @@ namespace Lorei
             //m_pythonEngine.ImportModule("System.Speech");
 
             // Setup python
-            m_pythonEngine.Globals.SetVariable("LoreiApi", m_owner);  // This passes Lorei to the python world
-            m_pythonEngine.Globals.SetVariable("ApiDictionary", m_apiDictionary); //This passes the rest of the api to python
+            foreach (String x in apiDictionary.Keys)
+            {
+                m_pythonEngine.Globals.SetVariable(x, apiDictionary[x]);
+            }
+
+            //m_pythonEngine.Globals.SetVariable("LoreiApi", m_owner);  // This passes Lorei to the python world
+            //m_pythonEngine.Globals.SetVariable("ApiDictionary", m_apiDictionary); //This passes the rest of the api to python
 
             this.ExecuteEachScript();
         }
@@ -79,7 +84,6 @@ namespace Lorei
         List<dynamic> m_listOfScopes = new List<dynamic>();
 
         // Language Processor Info
-        public LoreiLanguageProcessor m_owner;
-        public ApiDictionary m_apiDictionary;
+        IDictionary<string, ApiProvider> m_apiDictionary;
     }
 }

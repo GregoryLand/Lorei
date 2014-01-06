@@ -18,38 +18,36 @@ namespace Lorei
             InitializeComponent();
 
             // Setup Api Stuff
-            ApiDictionary apiDictionary = new ApiDictionary();
+            LoggingApiProvider loggingApiProvider           = new LoggingApiProvider();
+            TextToSpeechApiProvider textToSpeechApiProvider = new TextToSpeechApiProvider();
+            // Setup Api Stuff that needs Text to speech support
+            ProcessApiProvider processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
+            LoreiLanguageProvider p_Brain         = new LoreiLanguageProvider(textToSpeechApiProvider);
 
-            // Setup speech
-            m_myBrain = new LoreiLanguageProcessor(apiDictionary);
+            // Setup Language Provider
+            m_Brain = p_Brain; // HAHAHAHA science.....
+            SetupLanguageProvider();
 
-            // Set the Status Label to match current state
-            if (m_myBrain.Active)
-            {
-                stateText.Text = "Enabled";
-            }
-            else
-            {
-                stateText.Text = "Disabled";
-            }
-
-            // Setup Event Handlers
-            m_myBrain.StateChanged += new ProcesserSwitchChanged(m_myBrain_StateChanged);
-            m_myBrain.TextReceived += new ParseSpeech(m_myBrain_TextReceived);
-
+            // Setup the Api Listing
+            IDictionary<string, ApiProvider> apiListing = new ApiDictionary<string, ApiProvider>();
+            apiListing.Add("TextToSpeechApi", textToSpeechApiProvider);
+            apiListing.Add("ProcessApi", processApiProvider);
+            apiListing.Add("LoggingApi",loggingApiProvider);
+            apiListing.Add("LoreiApi", m_Brain);
+            
             // Setup Scripting Languages
-            m_myBrain.LoadScriptProcessor(new LuaScriptProcessor(m_myBrain, apiDictionary));
-            m_myBrain.LoadScriptProcessor(new IronPythonScriptProcessor(m_myBrain, apiDictionary));
-            m_myBrain.LoadScriptProcessor(new AllProgramsProcessor(m_myBrain, apiDictionary));
+            m_Brain.LoadScriptProcessor(new LuaScriptProcessor(apiListing));
+            m_Brain.LoadScriptProcessor(new IronPythonScriptProcessor(apiListing));
+            m_Brain.LoadScriptProcessor(new AllProgramsProcessor(m_Brain, apiListing));  // All programs processor is still all dirty and smelly. need to work on that.
         }
 
-        void m_myBrain_TextReceived(LoreiLanguageProcessor sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)
+        void m_Brain_TextReceived(LoreiLanguageProvider sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)
         {
-            this.lastCommandLabel.Text = m_myBrain.LastCommand;
+            this.lastCommandLabel.Text = m_Brain.LastCommand;
         }
 
         // Events
-        private void m_myBrain_StateChanged(LoreiLanguageProcessor sender, bool newState)
+        private void m_Brain_StateChanged(LoreiLanguageProvider sender, bool newState)
         {
             if (newState == true)
             {
@@ -64,10 +62,31 @@ namespace Lorei
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            m_myBrain.Active = !m_myBrain.Active;
+            m_Brain.Active = !m_Brain.Active;
         }
 
+        // Helper Methods
+        void SetupLanguageProvider()
+        {
+            // Set the Status Label to match current state
+            if (m_Brain.Active)
+            {
+                stateText.Text = "Enabled";
+            }
+            else
+            {
+                stateText.Text = "Disabled";
+            }
+
+            
+            // Setup Event Handlers
+            m_Brain.StateChanged += new ProcesserSwitchChanged(m_Brain_StateChanged);
+            m_Brain.TextReceived += new ParseSpeech(m_Brain_TextReceived);
+
+            return;
+        }
+        
         // Data
-        LoreiLanguageProcessor m_myBrain;
+        LoreiLanguageProvider m_Brain;
      }
 }

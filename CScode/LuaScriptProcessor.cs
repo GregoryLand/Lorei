@@ -14,12 +14,10 @@ namespace Lorei
     class LuaScriptProcessor : ScriptProcessor
     {
         /************ Constructors ************/
-        public LuaScriptProcessor(LoreiLanguageProcessor lorei, ApiDictionary apiDictionary)
+        public LuaScriptProcessor( IDictionary<string, ApiProvider> apiDictionary)
         {
             // Save pointer to Lorei
-            m_owner = lorei;
-            m_ProcessApi = (ProcessApiProvider)apiDictionary.getApiProvider("ProcessApi");
-            m_textToSpeechApi = (TextToSpeechApiProvider)apiDictionary.getApiProvider("TextToSpeechApi");
+            m_apiListing = apiDictionary;
 
             // Setup LUA functions
             SetupLuaFunctions();
@@ -76,10 +74,12 @@ namespace Lorei
                 //Need a better way to choose what's running the commands. This is thrown everything somethng from AllProgramsProcessor is said.
                 //This is due to both using launch.
                 Console.WriteLine(lse.StackTrace);
+                throw lse;
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.StackTrace);
+                throw exception;
             }
 
         }
@@ -91,22 +91,17 @@ namespace Lorei
             // Start up the lua engine
             m_luaEngine = new Lua();
 
-            // Setup global Lorei functions
-            m_luaEngine.RegisterFunction("RegisterProgramWithScript", this, this.GetType().GetMethod("RegisterProgramWithScript"));
-            RegisterFunctionTemplate("RegisterLoreiName", m_owner);
-            RegisterFunctionTemplate("RegisterLoreiFunction", m_owner);
-            RegisterFunctionTemplate("RegisterLoreiProgramName", m_owner);
-            RegisterFunctionTemplate("RegisterLoreiProgramCommand", m_owner);
-            
-            // Setup Global Text to speech functions
-            RegisterFunctionTemplate("SayMessage", m_textToSpeechApi);
-
-            // Setup Global Message Proc Functions
-            m_luaEngine.RegisterFunction("SendMessage", m_ProcessApi, m_ProcessApi.GetType().GetMethod("DispatchMessageToWindow"));
-            m_luaEngine.RegisterFunction("LaunchProgram", m_ProcessApi, m_ProcessApi.GetType().GetMethod("LaunchProgram"));
-            RegisterFunctionTemplate("ExitProgram", m_ProcessApi);
-            RegisterFunctionTemplate("ExitStubbornProgram", m_ProcessApi);
-
+            // Run through each api and expose the methods provided
+            // TODO: Setup each script api to have its own namespace
+            // right now we just dump them all out in global space till i have
+            // time to re write all of the scripts.
+            foreach (ApiProvider x in m_apiListing.Values)
+            {
+                foreach (System.Reflection.MethodInfo method in x.GetMethods())
+                {
+                    RegisterFunctionTemplate(method.Name, x);
+                }
+            }
         }
         public void RegisterProgramWithScript(string p_ProgramName)
         {
@@ -131,8 +126,6 @@ namespace Lorei
         /************ Data ************/
         // Lua Engine Data
         Lua m_luaEngine;
-        LoreiLanguageProcessor m_owner;
-        ProcessApiProvider m_ProcessApi;
-        TextToSpeechApiProvider m_textToSpeechApi;
+        IDictionary<string, ApiProvider> m_apiListing;
     }
 }

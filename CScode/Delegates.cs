@@ -7,7 +7,7 @@ using System.Speech.Synthesis;
 namespace Lorei
 {
     // Delegates for the Processer
-    public delegate void ParseSpeech(LoreiLanguageProcessor sender, SpeechRecognizedEventArgs data);
-    public delegate void ProcesserSwitchChanged( LoreiLanguageProcessor sender, Boolean newState);
+    public delegate void ParseSpeech(LoreiLanguageProvider sender, SpeechRecognizedEventArgs data);
+    public delegate void ProcesserSwitchChanged( LoreiLanguageProvider sender, Boolean newState);
 
 }
