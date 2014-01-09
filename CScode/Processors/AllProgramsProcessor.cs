@@ -59,7 +59,7 @@ namespace Lorei.CScode.Processors
         {
             foreach (KeyValuePair<String, String>registerProgram in keysToRegister)
             {
-                m_owner.RegisterLoreiProgramName(registerProgram.Key);
+                //m_owner.RegisterLoreiProgramName(registerProgram.Key);
             }
         }
 
