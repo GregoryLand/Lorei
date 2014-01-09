@@ -54,7 +54,7 @@ namespace Lorei
         {
             if (!m_Enabled)
             {
-                LoadSpeechInformation();
+                LoadTrackedGrammars();
 
                 m_speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
                 if (StateChanged != null) StateChanged(this, true);
@@ -79,31 +79,9 @@ namespace Lorei
         }
 
         //Methods for Registration Api
-        public void RegisterLoreiName(string p_NameForLorei)
+        public void RegisterLoreiGrammar(System.Speech.Recognition.Grammar p_grammarToLoad)
         {
-            // Do the work.... shame to need a function for this
-            RegisterTemplate(p_NameForLorei, m_Keywords);
-        }
-        public void RegisterLoreiFunction(string p_NameOfFunction)
-        {
-            RegisterTemplate(p_NameOfFunction, m_Functions);
-        }
-        public void RegisterLoreiProgramName(string p_NameOfProgram)
-        {
-            RegisterTemplate(p_NameOfProgram, m_Programs);
-        }
-        public void RegisterLoreiProgramCommand(string p_NameOfProgramCommand)
-        {
-            RegisterTemplate(p_NameOfProgramCommand, m_ProgramActions);
-        }
-        public void RegistrationDone()
-        {
-            // Check to see if i should be called
-            if (m_RegistrationComplete) return;
-
-            // Set flag so we disable all register functions
-            m_RegistrationComplete = true;
-            log.Info("Registration is complete.");
+            m_speechRecognizer.LoadGrammar(p_grammarToLoad);
         }
 
         /************ Api Provider Interface ************/
@@ -112,11 +90,7 @@ namespace Lorei
             List<System.Reflection.MethodInfo> methods = new List<System.Reflection.MethodInfo>();
 
             // Setup the list
-            methods.Add(this.GetType().GetMethod("RegisterLoreiName"));
-            methods.Add(this.GetType().GetMethod("RegisterLoreiFunction"));
-            methods.Add(this.GetType().GetMethod("RegisterLoreiProgramName"));
-            methods.Add(this.GetType().GetMethod("RegisterLoreiProgramCommand"));
-            methods.Add(this.GetType().GetMethod("RegistrationDone"));
+            methods.Add(this.GetType().GetMethod("RegisterLoreiGrammar"));
 
             return methods;
         }
@@ -163,79 +137,22 @@ namespace Lorei
                 SetupEventHandlers();
             }
         }
-        private void LoadSpeechInformation()
+        private void LoadTrackedGrammars()
         {
-            // Data
-            Choices keywords;
-            Choices functions;
-            Choices programs;
-            //Choices actions;
-            Choices programActions;
-
-            // Setup Grammars
-            m_FunctionExecution  = new GrammarBuilder();
-            m_ProgramControl     = new GrammarBuilder();
-
-            // Setup Keywords
-            keywords  = new Choices(m_Keywords.ToArray());
-            // Setup Function List
-            functions = new Choices(m_Functions.ToArray());
-            // Setup List of Programs;
-            programs  = new Choices(m_Programs.ToArray()); 
-            // Program Functions
-            programActions = new Choices(m_ProgramActions.ToArray());
-
-            // Setup Grammar
-            m_FunctionExecution.Append(keywords);
-            m_FunctionExecution.Append(functions);
-            m_FunctionExecution.Append(programs);
-            m_ProgramControl.Append(keywords);
-            m_ProgramControl.Append(programs);
-            m_ProgramControl.Append(programActions);
-            
-            // Setup Engine
-            m_FunctionGrammar = new Grammar(m_FunctionExecution);
-            m_ProgramGrammar  = new Grammar(m_ProgramControl);
-            m_FunctionGrammar.Name = "m_FunctionGrammar";
-            m_ProgramGrammar.Name  = "m_ProgramGrammar";
-
-            m_speechRecognizer.LoadGrammar(m_FunctionGrammar);
-            m_speechRecognizer.LoadGrammar(m_ProgramGrammar);
+            foreach(Grammar g in m_GrammarsLoaded)
+            {
+                m_speechRecognizer.LoadGrammar(g);
+            }
         }
         private void SetupEventHandlers()
         {
             m_speechRecognizer.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(m_speechRecognizer_SpeechRecognized);
             m_speechRecognizer.SpeechRecognitionRejected += new EventHandler<SpeechRecognitionRejectedEventArgs>(m_speechRecognizer_SpeechRecognitionRejected);
         }
-        private void RegisterTemplate(string p_String, List<string> p_list)
-        {
-            // This function is a template to create other functions because
-            // I'm lazy and copy paste is a bad idea so i make this...
-            if (m_RegistrationComplete) return;
-
-            // Check each element in list to see if new item exists already
-            foreach (string x in p_list)
-            {
-                if (x == p_String) return;
-            }
-
-            p_list.Add(p_String);
-        }
 
         // Helper Methods For Parsing Speech and script Api accessible functions 
         private void ParseSpeech(SpeechRecognizedEventArgs e)
         {
-            // Check if disabled by voice
-            // HACK::::::HACK::::::HACK
-            if (m_disabledByVoice == true)
-            {
-                if (e.Result.Words[1].Text != "Enable") return;
-                if (e.Result.Words[2].Text != "Speech") return;
-                m_disabledByVoice = false;
-                return;
-            }
-            // ENDHACK:::::ENDHACK::::ENDHACK
-
             // Let the world know we parsed a command
             m_lastCommand = e.Result.Text;
             this.TextReceived(this, e);
@@ -278,18 +195,10 @@ namespace Lorei
         }
 
         /************ Data ************/
-        private List<String> m_Keywords       = new List<string>();
-        private List<String> m_Functions      = new List<string>();
-        private List<String> m_Programs       = new List<string>();
-        private List<String> m_Aliases        = new List<string>();
-        private List<String> m_ProgramActions = new List<string>();
-        
+        private List<Grammar> m_GrammarsLoaded = new List<Grammar>();
+
         // Speech Components
         private SpeechRecognitionEngine m_speechRecognizer;
-        private GrammarBuilder    m_FunctionExecution;
-        private GrammarBuilder    m_ProgramControl;
-        private Grammar m_FunctionGrammar;
-        private Grammar m_ProgramGrammar;
 
         // Program Control Data
         private bool m_disabledByVoice = false;
@@ -299,7 +208,7 @@ namespace Lorei
         // Scripting Data
         private List<ScriptProcessor> m_scriptProcessors = new List<ScriptProcessor>();
         private TextToSpeechApiProvider m_textToSpeechApi;
-        bool m_RegistrationComplete = false;
+
         
         //Logging Data
         private static ILog log;

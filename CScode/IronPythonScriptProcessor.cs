@@ -8,7 +8,7 @@ using Microsoft.Scripting.Hosting;
 namespace Lorei
 {
     /* This class handles the IronPython scripting.  Iron Python has access to the entire 
-     * .net framework as well as any api calls we decide to provide to it.
+     * .net framework, standard python libs, as well as any api calls we decide to provide to it.
      * Currently it looks in the script folders for any python files and loads each 
      * python file into its own Script Scope.  The way this is setup means scripts 
      * will not interfere with each other.
@@ -35,9 +35,6 @@ namespace Lorei
                 m_pythonEngine.Globals.SetVariable(x, apiDictionary[x]);
             }
 
-            //m_pythonEngine.Globals.SetVariable("LoreiApi", m_owner);  // This passes Lorei to the python world
-            //m_pythonEngine.Globals.SetVariable("ApiDictionary", m_apiDictionary); //This passes the rest of the api to python
-
             this.ExecuteEachScript();
         }
 
@@ -45,7 +42,7 @@ namespace Lorei
         // Script Processor Interface
         public void ParseSpeech(System.Speech.Recognition.SpeechRecognizedEventArgs e)
         {
-            // Run threw all scripts and call the parse speech function on each one.
+            // Run through all scripts and call the parse speech function on each one.
             foreach (dynamic x in m_listOfScopes)
             {
                 if (x.ContainsVariable("ParseSpeech"))
