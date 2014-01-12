@@ -8,7 +8,6 @@ using System.Windows.Forms;
 // Speech
 using System.Speech.Synthesis;
 
-
 namespace Lorei
 {
     public partial class MainScreen : Form
@@ -18,11 +17,11 @@ namespace Lorei
             InitializeComponent();
 
             // Setup Api Stuff
-            LoggingApiProvider loggingApiProvider           = new LoggingApiProvider();
+            LoggingApiProvider      loggingApiProvider      = new LoggingApiProvider();
             TextToSpeechApiProvider textToSpeechApiProvider = new TextToSpeechApiProvider();
             // Setup Api Stuff that needs Text to speech support
-            ProcessApiProvider processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
-            LoreiLanguageProvider p_Brain         = new LoreiLanguageProvider(textToSpeechApiProvider);
+            ProcessApiProvider    processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
+            LoreiLanguageProvider p_Brain            = new LoreiLanguageProvider(textToSpeechApiProvider);
 
             // Setup Language Provider
             m_Brain = p_Brain; // HAHAHAHA science.....
@@ -32,7 +31,7 @@ namespace Lorei
             IDictionary<string, ApiProvider> apiListing = new ApiDictionary<string, ApiProvider>();
             apiListing.Add("TextToSpeechApi", textToSpeechApiProvider);
             apiListing.Add("ProcessApi", processApiProvider);
-            apiListing.Add("LoggingApi",loggingApiProvider);
+            apiListing.Add("LoggingApi", loggingApiProvider);
             apiListing.Add("LoreiApi", m_Brain);
             
             // Setup Scripting Languages

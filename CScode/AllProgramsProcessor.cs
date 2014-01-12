@@ -35,6 +35,7 @@ namespace Lorei
             theShortCuts = CreateDictionaryFromArray(theShortCuts, startMenuShortCuts);
             theShortCuts = CreateDictionaryFromArray(theShortCuts, userDesktopShortCuts);
             theShortCuts = CreateDictionaryFromArray(theShortCuts, publicDesktopShortCuts);
+            
             return theShortCuts;
         }
         
@@ -75,8 +76,7 @@ namespace Lorei
                 default:
                     //Nothing
                     break;
-            }
-                
+            } 
         }
 
         //Overriding default behavior to check for keys.
