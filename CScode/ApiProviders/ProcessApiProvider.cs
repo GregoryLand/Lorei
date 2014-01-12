@@ -161,7 +161,6 @@ namespace Lorei.CScode.ApiProviders
             return methods;
         }
 
-
         /************ Data ************/
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string, Process>();
         TextToSpeechApiProvider m_textToSpeechApi;

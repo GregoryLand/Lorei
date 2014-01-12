@@ -21,11 +21,12 @@ namespace Lorei.Forms
             InitializeComponent();
 
             // Setup Api Stuff
-            LoggingApiProvider loggingApiProvider           = new LoggingApiProvider();
+            LoggingApiProvider      loggingApiProvider      = new LoggingApiProvider();
             TextToSpeechApiProvider textToSpeechApiProvider = new TextToSpeechApiProvider();
-            // Setup Api Stuff that needs Text to speech support
-            ProcessApiProvider processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
-            RecognizerApiProvider p_Brain         = new RecognizerApiProvider(textToSpeechApiProvider);
+            
+	    // Setup Api Stuff that needs Text to speech support
+            ProcessApiProvider    processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
+            RecognizerApiProvider p_Brain            = new RecognizerApiProvider(textToSpeechApiProvider);
 
             // Setup Language Provider
             m_Brain = p_Brain; // HAHAHAHA science.....
@@ -35,7 +36,7 @@ namespace Lorei.Forms
             IDictionary<string, ApiProvider> apiListing = new ApiDictionary<string, ApiProvider>();
             apiListing.Add("TextToSpeechApi", textToSpeechApiProvider);
             apiListing.Add("ProcessApi", processApiProvider);
-            apiListing.Add("LoggingApi",loggingApiProvider);
+            apiListing.Add("LoggingApi", loggingApiProvider);
             apiListing.Add("LoreiApi", m_Brain);
             
             // Setup Scripting Languages
