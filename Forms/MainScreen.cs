@@ -7,9 +7,12 @@ using System.Text;
 using System.Windows.Forms;
 // Speech
 using System.Speech.Synthesis;
+using Lorei.CScode.ApiProviders;
+using Lorei.CScode.Processors;
+using Lorei.CScode.Interfaces;
+using Lorei.CScode;
 
-
-namespace Lorei
+namespace Lorei.Forms
 {
     public partial class MainScreen : Form
     {
@@ -22,7 +25,7 @@ namespace Lorei
             TextToSpeechApiProvider textToSpeechApiProvider = new TextToSpeechApiProvider();
             // Setup Api Stuff that needs Text to speech support
             ProcessApiProvider processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
-            LoreiLanguageProvider p_Brain         = new LoreiLanguageProvider(textToSpeechApiProvider);
+            RecognizerApiProvider p_Brain         = new RecognizerApiProvider(textToSpeechApiProvider);
 
             // Setup Language Provider
             m_Brain = p_Brain; // HAHAHAHA science.....
@@ -41,13 +44,13 @@ namespace Lorei
             m_Brain.LoadScriptProcessor(new AllProgramsProcessor(m_Brain, apiListing));  // All programs processor is still all dirty and smelly. need to work on that.
         }
 
-        void m_Brain_TextReceived(LoreiLanguageProvider sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)
+        void m_Brain_TextReceived(RecognizerApiProvider sender, System.Speech.Recognition.SpeechRecognizedEventArgs data)
         {
             this.lastCommandLabel.Text = m_Brain.LastCommand;
         }
 
         // Events
-        private void m_Brain_StateChanged(LoreiLanguageProvider sender, bool newState)
+        private void m_Brain_StateChanged(RecognizerApiProvider sender, bool newState)
         {
             if (newState == true)
             {
@@ -87,6 +90,6 @@ namespace Lorei
         }
         
         // Data
-        LoreiLanguageProvider m_Brain;
+        RecognizerApiProvider m_Brain;
      }
 }

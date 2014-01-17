@@ -103,23 +103,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CScode\AllProgramsProcessor.cs" />
+    <Compile Include="CScode\Processors\AllProgramsProcessor.cs" />
     <Compile Include="CScode\ApiDictionary.cs" />
-    <Compile Include="CScode\ApiProvider.cs" />
+    <Compile Include="CScode\Interfaces\ApiProvider.cs" />
     <Compile Include="CScode\Delegates.cs" />
-    <Compile Include="CScode\IronPythonScriptProcessor.cs" />
-    <Compile Include="CScode\LoggingApiProvider.cs" />
-    <Compile Include="CScode\LuaScriptProcessor.cs" />
-    <Compile Include="CScode\ProcessApiProvider.cs" />
-    <Compile Include="CScode\ScriptProcessor.cs" />
-    <Compile Include="CScode\TextToSpeechApiProvider.cs" />
+    <Compile Include="CScode\Processors\IronPythonScriptProcessor.cs" />
+    <Compile Include="CScode\ApiProviders\LoggingApiProvider.cs" />
+    <Compile Include="CScode\Processors\LuaScriptProcessor.cs" />
+    <Compile Include="CScode\ApiProviders\ProcessApiProvider.cs" />
+    <Compile Include="CScode\Interfaces\ScriptProcessor.cs" />
+    <Compile Include="CScode\ApiProviders\TextToSpeechApiProvider.cs" />
     <Compile Include="Forms\MainScreen.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainScreen.Designer.cs">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="CScode\LoreiLanguageProcessor.cs" />
+    <Compile Include="CScode\ApiProviders\RecognizerApiProvider.cs" />
     <Compile Include="CScode\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\MainScreen.resx">

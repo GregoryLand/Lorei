@@ -8,8 +8,9 @@ using System.Speech.Recognition;
 // Libs
 using NLua;
 using Microsoft.Win32;
+using Lorei.CScode.Interfaces;
 
-namespace Lorei
+namespace Lorei.CScode.Processors
 {
     class LuaScriptProcessor : ScriptProcessor
     {
@@ -74,12 +75,12 @@ namespace Lorei
                 //Need a better way to choose what's running the commands. This is thrown everything somethng from AllProgramsProcessor is said.
                 //This is due to both using launch.
                 Console.WriteLine(lse.StackTrace);
-                throw lse;
+                //throw lse;
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.StackTrace);
-                throw exception;
+                //throw exception;
             }
 
         }

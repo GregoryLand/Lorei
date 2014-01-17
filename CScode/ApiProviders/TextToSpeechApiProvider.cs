@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Speech.Synthesis;
+using Lorei.CScode.Interfaces;
 
-namespace Lorei
+namespace Lorei.CScode.ApiProviders
 {
     public class TextToSpeechApiProvider : ApiProvider
     {

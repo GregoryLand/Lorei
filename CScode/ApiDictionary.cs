@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using log4net;
 
-namespace Lorei
+namespace Lorei.CScode
 {
     //Added to hold the apps and make it easier to pass them. 
     public class ApiDictionary<TKey, TValue> : IDictionary<TKey, TValue>

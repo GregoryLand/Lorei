@@ -4,13 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Speech.Recognition;
 using System.Text;
+using Lorei.CScode.Interfaces;
+using Lorei.CScode.ApiProviders;
 
-namespace Lorei
+namespace Lorei.CScode.Processors
 {
     //Pretending to be a ScriptProcessor to make things easier. It works. I hope.
     class AllProgramsProcessor : ScriptProcessor
     {
-        public AllProgramsProcessor(LoreiLanguageProvider p_owner, IDictionary<string, ApiProvider> apiListing)
+        public AllProgramsProcessor(RecognizerApiProvider p_owner, IDictionary<string, ApiProvider> apiListing)
         {
             m_owner = p_owner;
             m_ProcApi = (ProcessApiProvider)apiListing["ProcessApi"];
@@ -105,7 +107,7 @@ namespace Lorei
         }
 
         ProcessApiProvider m_ProcApi;
-        LoreiLanguageProvider m_owner;
+        RecognizerApiProvider m_owner;
         Dictionary<String, String> m_ListOfPrograms;
     }
 }

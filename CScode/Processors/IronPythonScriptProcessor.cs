@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
+using Lorei.CScode.Interfaces;
 
-namespace Lorei
+namespace Lorei.CScode.Processors
 {
     /* This class handles the IronPython scripting.  Iron Python has access to the entire 
      * .net framework as well as any api calls we decide to provide to it.

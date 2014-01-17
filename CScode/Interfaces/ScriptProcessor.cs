@@ -5,7 +5,7 @@ using System.Text;
 // Speech
 using System.Speech.Recognition;
 
-namespace Lorei
+namespace Lorei.CScode.Interfaces
 {
     public interface ScriptProcessor
     {

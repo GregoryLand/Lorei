@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Lorei.Forms;
 
-namespace Lorei
+namespace Lorei.CScode
 {
     static class Program
     {

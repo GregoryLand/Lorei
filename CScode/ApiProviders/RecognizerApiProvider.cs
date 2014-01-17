@@ -31,18 +31,19 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using log4net;
+using Lorei.CScode.Interfaces;
 
-namespace Lorei
+namespace Lorei.CScode.ApiProviders
 {
-    public class LoreiLanguageProvider: ApiProvider
+    public class RecognizerApiProvider: ApiProvider
     {
         /************ Constructors ************/
-        public LoreiLanguageProvider(TextToSpeechApiProvider p_textToSpeechApi)
+        public RecognizerApiProvider(TextToSpeechApiProvider p_textToSpeechApi)
         {
             m_textToSpeechApi = p_textToSpeechApi;
 
             log4net.Config.XmlConfigurator.Configure();
-            log = LogManager.GetLogger(typeof(LoreiLanguageProvider));
+            log = LogManager.GetLogger(typeof(RecognizerApiProvider));
 
             // Setup Engine
             SetupSpeechRecognitionEngine();

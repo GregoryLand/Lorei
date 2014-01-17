@@ -1,4 +1,4 @@
-namespace Lorei
+namespace Lorei.Forms
 {
     partial class MainScreen
     {

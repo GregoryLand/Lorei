@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Lorei.CScode.Interfaces;
 
-namespace Lorei
+namespace Lorei.CScode.ApiProviders
 {
     class ProcessApiProvider : ApiProvider
     {
