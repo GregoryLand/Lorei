@@ -55,8 +55,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>Lorei.CScode.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IronPython">
