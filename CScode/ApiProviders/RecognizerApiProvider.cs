@@ -37,7 +37,11 @@ namespace Lorei.CScode.ApiProviders
 {
     public class RecognizerApiProvider: ApiProvider
     {
-        /************ Constructors ************/
+        /**
+         * API Provider for the Speech recognizer. Includes Grammar creation
+         * 
+         * @param p_textToSpeechApi Allows Speech
+         */
         public RecognizerApiProvider(TextToSpeechApiProvider p_textToSpeechApi)
         {
             m_textToSpeechApi = p_textToSpeechApi;
@@ -49,8 +53,9 @@ namespace Lorei.CScode.ApiProviders
             SetupSpeechRecognitionEngine();
         }
 
-        /************ Destructor ************/
-        /************ Methods ************/
+        /**
+         * Changes Lorei's state to Listening.
+         */
         public void LoreiStartListening()
         {
             if (!m_Enabled)
@@ -63,6 +68,10 @@ namespace Lorei.CScode.ApiProviders
                 log.Info("Lorei has started listening.");
             }
         }
+
+        /**
+         * Changes Lorei's state to not Listening.
+         */
         public void LoreiStopListening()
         {
             if (m_Enabled)
@@ -73,18 +82,34 @@ namespace Lorei.CScode.ApiProviders
                 log.Info("Lorei has stopped listening.");
             }
         }
+
+        /**
+         * Loads in Script Processor, so it can pass Speech events to them.
+         * 
+         * @param p_scriptProcessor The current ScriptProcessor to load.
+         */
         public void LoadScriptProcessor(ScriptProcessor p_scriptProcessor)
         {
             m_scriptProcessors.Add(p_scriptProcessor);
             log.Info(p_scriptProcessor + " has been added to the list of Script Processors.");
         }
 
-        //Methods for Registration Api
+        /**
+         * Register names of the system itself, for the Recognizer.
+         * 
+         * @param p_NameForLorei Names for Lorei itself
+         */
         public void RegisterLoreiName(string p_NameForLorei)
         {
             // Do the work.... shame to need a function for this
             RegisterTemplate(p_NameForLorei, m_Keywords);
         }
+
+        /**
+         * Register a Function keyword to the grammar
+         * 
+         * @param p_NameOfFunction Function name
+         */
         public void RegisterLoreiFunction(string p_NameOfFunction)
         {
             RegisterTemplate(p_NameOfFunction, m_Functions);

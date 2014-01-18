@@ -9,23 +9,39 @@ namespace Lorei.CScode.ApiProviders
 {
     public class LoggingApiProvider : ApiProvider
     {
-        /************ Constructors ************/
+        /**
+         * Base Constructor which creates a Log4Net logger object for Scripts to use. 
+         */
         public LoggingApiProvider()
         {
             log = LogManager.GetLogger(typeof(LoggingApiProvider));
         }
 
-        /************ Methods ************/
+        /**
+         * Direct link to Log4Net's Info logger method.
+         * 
+         * @param infoString The information to pass to the logger
+         */
         public void Info(String infoString)
         {
             log.Info(infoString);
         }
 
+        /**
+         * Direct link to Log4Net's Error logger method.
+         * 
+         * @param errorString The error message to pass to the logger
+         */
         public void Error(String errorString)
         {
             log.Error(errorString);
         }
 
+        /**
+         * Direct link to Log4Net's Debug logger method.
+         * 
+         * @param debugString The debug message to pass to the logger
+         */
         public void Debug(String debugString)
         {
             log.Debug(debugString);

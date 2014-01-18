@@ -10,15 +10,21 @@ namespace Lorei.CScode.ApiProviders
 {
     class ProcessApiProvider : ApiProvider
     {
-        /************ Constructors ************/
+        /**
+         * Basic constructor which creates an object to allow scripts access to Software Processes.
+         * 
+         * @param p_textToSpeechApi Instance of TextToSpeechApiProvider
+         */
         public ProcessApiProvider(TextToSpeechApiProvider p_textToSpeechApi)
         {
             m_textToSpeechApi = p_textToSpeechApi;
         }
 
-        /************ Destructor ************/
-        /************ Methods ************/
-        // Api accessible Program Control Methods
+        /**
+         * API method to Launch system programs.
+         * 
+         * @param p_program Full file path to the program's executable
+         */
         public void LaunchProgram(String p_program)
         {
             if (!m_runningPrograms.ContainsKey(p_program))
@@ -51,6 +57,12 @@ namespace Lorei.CScode.ApiProviders
             }
 
         }
+
+        /**
+         * API Method to exit system program.
+         * 
+         * @param p_program Full path to the program's executable
+         */
         public void ExitProgram(String p_program)
         {
             // Check and see if the process exists
@@ -71,6 +83,12 @@ namespace Lorei.CScode.ApiProviders
             }
             // work done go home 
         }
+
+        /**
+         * API Method to kill system programs
+         * 
+         * @param p_program Full path to the program's executable
+         */
         public void ExitStubbornProgram(String p_program)
         {
             Process procToKill;
@@ -89,6 +107,15 @@ namespace Lorei.CScode.ApiProviders
                 m_runningPrograms.Remove(p_program);
             }
         }
+
+        /**
+         * API to send KeyStrokes to other programs
+         * 
+         * @param p_program Full Path to program's executable
+         * @param p_myMessage ?
+         * @param p_myWParam ?
+         * @param p_myLParam ?
+         */
         public void SendMessage(String p_program, int p_myMessage, int p_myWParam, int p_myLParam)
         {
             // This is cool
