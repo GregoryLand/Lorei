@@ -7,7 +7,9 @@ namespace Lorei.CScode.Interfaces
 {
     public interface ApiProvider
     {
-        // Get list of methods provided by this api
+        /**
+         * Reflective method to get a list of public methods in an ApiProvider class
+         */
         List<System.Reflection.MethodInfo> GetMethods();
     }
 }

@@ -9,7 +9,9 @@ namespace Lorei.CScode.Interfaces
 {
     public interface ScriptProcessor
     {
-        // Methods
+        /**
+         * Method that Lorei uses to pass spoken information to ScriptProcessors
+         */
         void ParseSpeech(SpeechRecognizedEventArgs e);
     }
 }

@@ -114,14 +114,30 @@ namespace Lorei.CScode.ApiProviders
         {
             RegisterTemplate(p_NameOfFunction, m_Functions);
         }
+
+        /**
+         * Register a name for program
+         *  
+         * @parm p_NameOfProgram Name of the program
+         */
         public void RegisterLoreiProgramName(string p_NameOfProgram)
         {
             RegisterTemplate(p_NameOfProgram, m_Programs);
         }
+
+        /**
+         * Register a command for a script
+         * 
+         * @parm p_NameOfProgramCommand Name of the command
+         */
         public void RegisterLoreiProgramCommand(string p_NameOfProgramCommand)
         {
             RegisterTemplate(p_NameOfProgramCommand, m_ProgramActions);
         }
+
+        /**
+         * Alert the program that everything is Registered
+         */
         public void RegistrationDone()
         {
             // Check to see if i should be called
@@ -147,7 +163,9 @@ namespace Lorei.CScode.ApiProviders
             return methods;
         }
 
-        // Event Handlers
+        /**
+         * Event triggered when Lorei understand what is being said
+         */
         private void m_speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             // Interaction Message
@@ -157,6 +175,10 @@ namespace Lorei.CScode.ApiProviders
             ParseSpeech(e);
             log.Info("Message: " + e.Result.Text);
         }
+
+        /**
+         * Event triggered if no command is understood
+         */
         private void m_speechRecognizer_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)
         {
             // If we knew any words
