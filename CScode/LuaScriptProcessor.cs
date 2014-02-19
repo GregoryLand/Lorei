@@ -163,8 +163,7 @@ namespace Lorei
         }
         private void LoadSpeechInformation()
         {
-            // Fake the old api from lorei 
-
+            /*** Fake the old api from lorei ***/
             // Data
             Choices keywords;
             Choices functions;
