@@ -211,6 +211,10 @@ namespace Lorei.CScode.Processors
         {
             // Do the work.... shame to need a function for this
             RegisterTemplate(p_NameForLorei, m_Keywords);
+
+            // Add it to lorei as well for now
+            // HACK::
+            this.m_LoreiApi.AddLoreiName(p_NameForLorei);
         }
         public void RegisterLoreiFunction(string p_NameOfFunction)
         {

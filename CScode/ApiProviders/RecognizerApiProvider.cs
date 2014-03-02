@@ -99,6 +99,17 @@ namespace Lorei.CScode.ApiProviders
         {
             m_speechRecognizer.LoadGrammar(p_grammarToLoad);
         }
+        public List<string> GetLoreiNames()
+        {
+            return m_Keywords;
+        }
+        public void AddLoreiName( System.String p_nameToAdd )
+        {
+            // HACK::  Remove this later and replace with a flat text file that all scripts can read.
+            if (m_Keywords.Contains(p_nameToAdd)) return;
+
+            m_Keywords.Add(p_nameToAdd);
+        }
 
         /************ Api Provider Interface ************/
         public List<System.Reflection.MethodInfo> GetMethods()
@@ -107,6 +118,8 @@ namespace Lorei.CScode.ApiProviders
 
             // Setup the list
             methods.Add(this.GetType().GetMethod("RegisterLoreiGrammar"));
+            methods.Add(this.GetType().GetMethod("GetLoreiNames"));
+            methods.Add(this.GetType().GetMethod("AddLoreiName"));
 
             return methods;
         }
@@ -230,7 +243,8 @@ namespace Lorei.CScode.ApiProviders
         // Scripting Data
         private List<ScriptProcessor> m_scriptProcessors = new List<ScriptProcessor>();
         private TextToSpeechApiProvider m_textToSpeechApi;
-
+        // List of nicknames for Lorei
+        private List<String> m_Keywords = new List<string>(); 
         
         //Logging Data
         private static ILog log;
