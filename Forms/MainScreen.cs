@@ -12,7 +12,11 @@ using Lorei.CScode.Processors;
 using Lorei.CScode.Interfaces;
 using Lorei.CScode;
 
+<<<<<<< HEAD
 namespace Lorei.Forms
+=======
+namespace Lorei
+>>>>>>> a2282d148d1f546c43e82e10a564ee405e203a31
 {
     public partial class MainScreen : Form
     {
@@ -23,10 +27,11 @@ namespace Lorei.Forms
             // Setup Api Stuff
             LoggingApiProvider      loggingApiProvider      = new LoggingApiProvider();
             TextToSpeechApiProvider textToSpeechApiProvider = new TextToSpeechApiProvider();
-            
-	        // Setup Api Stuff that needs Text to speech support
+
+	    // Setup Api Stuff that needs Text to speech support
             ProcessApiProvider    processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
             RecognizerApiProvider p_Brain            = new RecognizerApiProvider(textToSpeechApiProvider);
+
 
             // Setup Language Provider
             m_Brain = p_Brain; // HAHAHAHA science.....
