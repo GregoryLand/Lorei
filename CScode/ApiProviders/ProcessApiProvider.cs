@@ -8,7 +8,7 @@ using Lorei.CScode.Interfaces;
 
 namespace Lorei.CScode.ApiProviders
 {
-    class ProcessApiProvider : ApiProvider
+    public class ProcessApiProvider : ApiProvider
     {
         /**
          * Basic constructor which creates an object to allow scripts access to Software Processes.
@@ -160,7 +160,6 @@ namespace Lorei.CScode.ApiProviders
 
             return methods;
         }
-
 
         /************ Data ************/
         private Dictionary<String, Process> m_runningPrograms = new Dictionary<string, Process>();

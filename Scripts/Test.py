@@ -2,7 +2,8 @@
 clr.AddReference('System.Windows.Forms')
 import System.Windows.Forms
 import LoreiApi
+import TextToSpeechApi
 
-def Simple():
-	System.Windows.Forms.MessageBox.Show("Hello World")
-	LoreiApi.SayMessage("Hello From Python")
+#System.Windows.Forms.MessageBox.Show("Hello World")
+#TextToSpeechApi.SayMessage("Hello From Python")
+    

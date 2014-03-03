@@ -37,6 +37,7 @@ namespace Lorei.CScode.Processors
             theShortCuts = CreateDictionaryFromArray(theShortCuts, startMenuShortCuts);
             theShortCuts = CreateDictionaryFromArray(theShortCuts, userDesktopShortCuts);
             theShortCuts = CreateDictionaryFromArray(theShortCuts, publicDesktopShortCuts);
+            
             return theShortCuts;
         }
         
@@ -59,7 +60,7 @@ namespace Lorei.CScode.Processors
         {
             foreach (KeyValuePair<String, String>registerProgram in keysToRegister)
             {
-                m_owner.RegisterLoreiProgramName(registerProgram.Key);
+                //m_owner.RegisterLoreiProgramName(registerProgram.Key);
             }
         }
 
@@ -77,8 +78,7 @@ namespace Lorei.CScode.Processors
                 default:
                     //Nothing
                     break;
-            }
-                
+            } 
         }
 
         //Overriding default behavior to check for keys.
