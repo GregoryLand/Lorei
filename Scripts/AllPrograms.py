@@ -12,8 +12,6 @@ import LoreiApi
 import ProcessApi
 import TextToSpeechApi
 
-TextToSpeechApi.SayMessage("Entering All Programs Script")
-
 ##### Setup Functions #####
 def CreateDictionaryFromArray( theDictionary, theArray ):
     for arrayElement in theArray:
