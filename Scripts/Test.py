@@ -5,5 +5,5 @@ import LoreiApi
 import TextToSpeechApi
 
 #System.Windows.Forms.MessageBox.Show("Hello World")
-TextToSpeechApi.SayMessage("Hello From Python")
+#TextToSpeechApi.SayMessage("Hello From Python")
     
