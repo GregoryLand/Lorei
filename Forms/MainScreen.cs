@@ -24,7 +24,7 @@ namespace Lorei.Forms
             LoggingApiProvider      loggingApiProvider      = new LoggingApiProvider();
             TextToSpeechApiProvider textToSpeechApiProvider = new TextToSpeechApiProvider();
             
-	    // Setup Api Stuff that needs Text to speech support
+	        // Setup Api Stuff that needs Text to speech support
             ProcessApiProvider    processApiProvider = new ProcessApiProvider(textToSpeechApiProvider);
             RecognizerApiProvider p_Brain            = new RecognizerApiProvider(textToSpeechApiProvider);
 

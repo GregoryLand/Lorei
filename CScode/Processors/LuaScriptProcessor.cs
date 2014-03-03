@@ -9,6 +9,7 @@ using System.Speech.Recognition;
 using NLua;
 using Microsoft.Win32;
 using Lorei.CScode.Interfaces;
+using Lorei.CScode.ApiProviders;
 
 namespace Lorei.CScode.Processors
 {
@@ -26,7 +27,7 @@ namespace Lorei.CScode.Processors
                 if (x == "LoreiApi")
                 {
                     // Grab the LoreiApi and cast it so we have access to it so we can expose the old api
-                    m_LoreiApi = (LoreiLanguageProvider)apiDictionary[x];
+                    m_LoreiApi = (RecognizerApiProvider)apiDictionary[x];
                     break;
                 }
             }
@@ -245,7 +246,7 @@ namespace Lorei.CScode.Processors
 
         /************ Fake the old lua script interface ************/
         // Ref to language api to fake old functions that use to exist here
-        LoreiLanguageProvider m_LoreiApi;
+        RecognizerApiProvider m_LoreiApi;
         // Keep lists of keywords that we use to keep track of in Language Proc/Prov
         private List<String> m_Keywords = new List<string>();
         private List<String> m_Functions = new List<string>();
