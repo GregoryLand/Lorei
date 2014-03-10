@@ -136,10 +136,10 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <Content Include="Scripts\command.lua">
+    <Content Include="Scripts\Command.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\lorei.lua">
+    <Content Include="Scripts\Lorei.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Pandora.lua">
@@ -164,10 +164,10 @@
     <Content Include="Scripts\Test.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\ventrilo.lua">
+    <Content Include="Scripts\Ventrilo.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\winamp.lua">
+    <Content Include="Scripts\Winamp.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Visual.lua">
