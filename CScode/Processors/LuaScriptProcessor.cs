@@ -57,6 +57,11 @@ namespace Lorei.CScode.Processors
             // boiler plate code.  This replaces a lot of stupid code. Look below to see
             // what i replaced.  Every program would have had to be hard coded into Lorei
             // and this system works much much better.
+            if (e.Result.Grammar.Name != m_luaGrammarName)
+            {
+                return;
+            }
+
             try
             {
                 /*** Check for keywords owned by functions ***/
@@ -231,7 +236,9 @@ namespace Lorei.CScode.Processors
             // Setup the grammar
             if (grammarBuffer.Count > 0)
             {
-                m_LoreiApi.RegisterLoreiGrammar(new Grammar(combinedGrammars.ToGrammarBuilder()));
+                Grammar finalGrammarToReturn = new Grammar(combinedGrammars.ToGrammarBuilder());
+                finalGrammarToReturn.Name = m_luaGrammarName;
+                m_LoreiApi.RegisterLoreiGrammar(finalGrammarToReturn);
             }
         }
         private GrammarBuilder LoadSpeechInformation(ScriptData p_scriptData)
@@ -376,6 +383,9 @@ namespace Lorei.CScode.Processors
         
         // Let lua script proc know we are done with registration
         bool m_RegistrationComplete = false;
+
+        // Constants
+        string m_luaGrammarName = "LuaScriptProcessorGrammar";
 
         /************ Struct for data storage ************/
         private class ScriptData
