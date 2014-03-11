@@ -19,6 +19,17 @@ def CreateDictionaryFromArray( theDictionary, theArray ):
             theDictionary.Add( System.IO.Path.GetFileNameWithoutExtension(arrayElement), arrayElement )
     return theDictionary
 
+def EliminateLuaControlledItems( theDictionary ):
+    # Index List of Lua Files in directory 
+    luaFiles = System.IO.Directory.GetFiles(  System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + "\\Scripts", "*.lua", System.IO.SearchOption.AllDirectories);
+    
+    # Remove entries from the list that match out items
+    for luaFileToCheckFor in luaFiles:
+        theDictionary.Remove( System.IO.Path.GetFileNameWithoutExtension(luaFileToCheckFor ) )
+        #System.Windows.Forms.MessageBox.Show( System.IO.Path.GetFileNameWithoutExtension(luaFileToCheckFor) )
+
+    return theDictionary
+
 def GetAllShortcuts( ):
     # Shortcut list
     theShortCuts = System.Collections.Generic.Dictionary[str,str]()
@@ -26,15 +37,18 @@ def GetAllShortcuts( ):
     # Grab the shortcuts from common places
     startMenuShortCuts     = System.IO.Directory.GetFiles("C:\\ProgramData\\Microsoft\\Windows\\Start Menu", "*.lnk", System.IO.SearchOption.AllDirectories)
     userDesktopShortCuts   = System.IO.Directory.GetFiles("C:\\Users\\" + System.Environment.UserName + "\\Desktop", "*.lnk", System.IO.SearchOption.AllDirectories)
-    publicDesktopShortCuts = System.IO.Directory.GetFiles("C:\\Users\\Public\\Desktop", "*.lnk", System.IO.SearchOption.AllDirectories)
+    publicDesktopShortCuts = System.IO.Directory.GetFiles("C:\\Users\\Public\\Desktop", "*.lnk", System.IO.SearchOption.AllDirectories)          
     
     # setup the dictionary
     theShortCuts = CreateDictionaryFromArray( theShortCuts, startMenuShortCuts )
     theShortCuts = CreateDictionaryFromArray( theShortCuts, userDesktopShortCuts )
     theShortCuts = CreateDictionaryFromArray( theShortCuts, publicDesktopShortCuts )
 
+    # Remove any Lua script controlled programs from the list
+    theShortCuts = EliminateLuaControlledItems( theShortCuts )
+
     return theShortCuts
-    
+
 ##### Setup and Create List of Programs to pick from #####
 ProgramsFound = System.Speech.Recognition.Choices()
 
@@ -72,13 +86,13 @@ LoreiApi.RegisterLoreiGrammar( TopLevelGrammar )
 def ParseSpeech( speechEvent ):
     if speechEvent.Result.Grammar.Name == "AllProgramsPythonScriptGrammar":
         if speechEvent.Result.Words[1].Text == "Launch":
-            #DO Launch Stuff
-            TextToSpeechApi.SayMessage("Launch")
+            #Do Launch Stuff
+            #TextToSpeechApi.SayMessage("Launching with Python")
             if speechEvent.Result.Words[2].Text in m_ListOfPrograms:
                 ProcessApi.LaunchProgram( m_ListOfPrograms[speechEvent.Result.Words[2].Text].ToString() )
         elif speechEvent.Result.Words[1].Text == "Close":
             #Do Close Stuff
-            TextToSpeechApi.SayMessage("Close")
+            #TextToSpeechApi.SayMessage("Closeing with Python")
             if speechEvent.Result.Words[2].Text in m_ListOfPrograms:
                 ProcessApi.ExitProgram( m_ListOfPrograms[speechEvent.Result.Words[2].Text].ToString() )
     return

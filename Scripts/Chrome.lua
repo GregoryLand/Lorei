@@ -22,8 +22,8 @@ function Chrome.ToLaunch()
 end
 
 function Chrome.ToClose()
-	ExitProgram(Chrome.FilePath)
-	--ExitStubbornProgram(Pandora.FilePath)
+	--ExitProgram(Chrome.FilePath)
+	ExitStubbornProgram(Chrome.FilePath)
 end
 
 -- On Speech Receved
