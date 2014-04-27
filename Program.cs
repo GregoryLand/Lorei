@@ -1,5 +1,6 @@
 ﻿using System;
 using Gtk;
+using Lorei.Forms;
 
 namespace Lorei
 {
@@ -9,7 +10,6 @@ namespace Lorei
 		{
 			Application.Init ();
 			MainWindow win = new MainWindow ();
-			win.Show ();
 			Application.Run ();
 		}
 	}
