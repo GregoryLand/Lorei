@@ -129,6 +129,9 @@ namespace Lorei.CScode.ApiProviders
          */
         private void m_speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
+            // If we are not confident that the first word was correct jump out.
+            if (e.Result.Words[0].Confidence < 0.94) return;
+
             // Interaction Message
             m_textToSpeechApi.SayMessage("Ok!");
             
@@ -191,9 +194,6 @@ namespace Lorei.CScode.ApiProviders
             // Let the world know we parsed a command
             m_lastCommand = e.Result.Text;
             this.TextReceived(this, e);
-
-            // If we are not confident that the first word was correct jump out.
-            if (e.Result.Words[0].Confidence < 0.92) return;
 
             // Pass the buck
             // Let our scripting languages have the message.
