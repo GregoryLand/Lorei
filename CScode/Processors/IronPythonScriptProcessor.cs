@@ -69,10 +69,7 @@ namespace Lorei.CScode.Processors
 
             foreach (String script in scripts)
             {
-                if (script.EndsWith(".py"))
-                {
-                    m_listOfScopes.Add( m_pythonEngine.ExecuteFile(script) );
-                }
+                m_listOfScopes.Add( m_pythonEngine.ExecuteFile(script) );
             }
         }
 
