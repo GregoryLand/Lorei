@@ -65,7 +65,7 @@ namespace Lorei.CScode.Processors
         /************ Helper Methods ************/
         public void ExecuteEachScript()
         {
-            String[] scripts = System.IO.Directory.GetFiles("Scripts/");
+            String[] scripts = System.IO.Directory.GetFiles("Scripts/", "*.py", System.IO.SearchOption.AllDirectories);
 
             foreach (String script in scripts)
             {

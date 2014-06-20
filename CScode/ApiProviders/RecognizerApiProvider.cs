@@ -192,6 +192,9 @@ namespace Lorei.CScode.ApiProviders
             m_lastCommand = e.Result.Text;
             this.TextReceived(this, e);
 
+            // If we are not confident that the first word was correct jump out.
+            if (e.Result.Words[0].Confidence < 0.92) return;
+
             // Pass the buck
             // Let our scripting languages have the message.
             // TODO: Clean up this interface later
