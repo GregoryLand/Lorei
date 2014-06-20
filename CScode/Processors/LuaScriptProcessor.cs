@@ -94,7 +94,7 @@ namespace Lorei.CScode.Processors
                 {
                     foreach (var y in x.m_Programs)
                     {
-                        if (e.Result.Words[1].Text == y)
+                        if ( y.Contains( e.Result.Words[1].Text )   )
                         {
                             // Rebuild the string from words to pass to the Lua engine.
                             string textToPass = "";
